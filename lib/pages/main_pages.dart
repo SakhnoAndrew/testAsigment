@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/domain/api_client.dart';
+import 'package:flutter_application_1/pages/favorite_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -13,11 +14,15 @@ class _MainPageState extends State<MainPage> {
   static String searchText = '';
   var dataFetcher = DataFetcher;
 
-  void _onSubmitted(String text) {
+  void onSubmitted(String text) {
     setState(() {
       searchText = text;
-      //dataFetcher.toString();
-      DataFetcher().getModels(searchText);
+      var model = DataFetcher().getModels(searchText);
+
+      // Future.delayed(const Duration(seconds: 5), () {
+
+      // });
+      //ShowCycle().showCycleOne(true);
     });
   }
 
@@ -27,7 +32,7 @@ class _MainPageState extends State<MainPage> {
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: TextField(
         controller: controllerSearch,
-        onSubmitted: _onSubmitted,
+        onSubmitted: onSubmitted,
         keyboardType: TextInputType.name,
         style: Theme.of(context).textTheme.headline6,
         decoration: const InputDecoration(

@@ -2,7 +2,7 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/widgets/build_show_line.dart';
 import 'package:flutter_application_1/widgets/build_search_text.dart';
-//import 'package:flutter_application_1/domain/api_client.dart';
+import 'package:flutter_application_1/domain/api_client.dart';
 
 class FavoritePage extends StatefulWidget {
   const FavoritePage({super.key});
@@ -12,53 +12,55 @@ class FavoritePage extends StatefulWidget {
 }
 
 // --------------------------------------------------- //
-class DataModel {
-  final String imageURL;
-  final String title;
-  final String text;
+// class DataModel {
+//   final String imageURL;
+//   final String title;
+//   final String text;
 
-  DataModel({required this.imageURL, required this.title, required this.text});
-}
+//   DataModel({required this.imageURL, required this.title, required this.text});
+// }
 
-List<DataModel> dataShows = [
-  DataModel(
-    imageURL:
-        'https://static.tvmaze.com/uploads/images/medium_portrait/31/78286.jpg',
-    title: 'Title 1',
-    text: 'Text 1',
-  ),
-  DataModel(
-    imageURL:
-        'https://static.tvmaze.com/uploads/images/medium_portrait/31/78286.jpg',
-    title: 'Title 2',
-    text: 'Text 2',
-  ),
-  // Add more DataModel objects here
-];
+// List<DataModel> dataShows = [
+//   DataModel(
+//     imageURL:
+//         'https://static.tvmaze.com/uploads/images/medium_portrait/31/78286.jpg',
+//     title: 'Title 1',
+//     text: 'Text 1',
+//   ),
+//   DataModel(
+//     imageURL:
+//         'https://static.tvmaze.com/uploads/images/medium_portrait/31/78286.jpg',
+//     title: 'Title 2',
+//     text: 'Text 2',
+//   ),
+//   // Add more DataModel objects here
+// ];
+// --------------------------------------------------- //
 
-// --------------------------------------------------- //  api_client
+// --------------------------------------------------- //
+// var cycle = ShowCycle();
 
-// --------------------------------------------------- //  api_client
+// class ShowCycle {
+//   List<Widget> showCycleOne() {
+//     List<Widget> widgets = [];
 
-class ShowCycle {
-  List<Widget> showCycleOne() {
-    List<Widget> widgets = [];
-    for (int i = 0; i < dataShows.length; i++) {
-      widgets.add(buildShowLine(
-        imageURL: dataShows[i].imageURL,
-        title: dataShows[i].title,
-        text: dataShows[i].text,
-      ));
-    }
-    return widgets;
-  }
-}
+//     widgets.add(buildSearchTextField());
+
+//     for (int i = 0; i < DataFetcher().show.length - 1; i++) {
+//       widgets.add(buildShowLine(
+//         title: DataFetcher().show[i].name,
+//         text: DataFetcher().show[i].language,
+//         imageURL: DataFetcher().show[i].image[1],
+//       ));
+//     }
+
+//     return widgets;
+//   }
+// }
 
 // --------------------------------------------------- //
 
 class _FavoritePageState extends State<FavoritePage> {
-  var cycle = ShowCycle();
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -70,13 +72,14 @@ class _FavoritePageState extends State<FavoritePage> {
                 Navigator.pushReplacementNamed(context, '/navigation');
               },
               icon: const Icon(Icons.dehaze_outlined)),
-          title: const Text("Main"),
+          title: const Text("Favorite"),
         ),
         body: SafeArea(
-            child: ListView(
-          padding: const EdgeInsets.all(8.0),
-          children: cycle.showCycleOne(),
-        )),
+          child: ListView(
+            padding: const EdgeInsets.all(8.0),
+            //children: cycle.showCycleOne(),
+          ),
+        ),
       ),
     );
   }
