@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/main_pages.dart';
 import 'package:flutter_application_1/pages/favorite_page.dart';
 
-class NavigationDrawer extends StatelessWidget {
-  const NavigationDrawer({super.key});
+class NavigationDrawerWidget extends StatelessWidget {
+  const NavigationDrawerWidget({super.key});
 
   @override
   Widget build(BuildContext context) => Drawer(

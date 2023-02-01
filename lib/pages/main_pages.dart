@@ -21,7 +21,7 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
-  Widget _buildSearchTextField() {
+  Widget searchTextFieldWidget() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: TextField(
@@ -40,7 +40,7 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  Widget _buildShowLine() {
+  Widget showLineWidget() {
     return Card(
       child: Row(
         children: [
@@ -88,8 +88,8 @@ class _MainPageState extends State<MainPage> {
           child: ListView(
             padding: const EdgeInsets.all(8.0),
             children: [
-              _buildSearchTextField(),
-              _buildShowLine(),
+              searchTextFieldWidget(),
+              showLineWidget(),
             ],
           ),
         ),

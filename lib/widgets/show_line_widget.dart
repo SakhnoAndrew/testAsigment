@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget buildShowLine(
+Widget showLineWidget(
     {String imageURL = "", String title = "", String text = ""}) {
   //widget for result search
   return Card(

@@ -1,6 +1,6 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/pages/navigation_draver.dart';
+import 'package:flutter_application_1/pages/navigation_drawer.dart';
 
 class FavoritePage extends StatefulWidget {
   const FavoritePage({super.key});
@@ -18,7 +18,7 @@ class _FavoritePageState extends State<FavoritePage> {
           backgroundColor: const Color.fromARGB(255, 5, 59, 151),
           title: const Text("Favorite"),
         ),
-        drawer: const NavigationDrawer(),
+        drawer: const NavigationDrawerWidget(),
         body: SafeArea(
           child: ListView(
             padding: const EdgeInsets.all(8.0),
