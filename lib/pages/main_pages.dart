@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/domain/api_client.dart';
-import 'package:flutter_application_1/pages/favorite_page.dart';
+import 'package:flutter_application_1/pages/navigation_draver.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -18,11 +18,6 @@ class _MainPageState extends State<MainPage> {
     setState(() {
       searchText = text;
       var model = DataFetcher().getModels(searchText);
-
-      // Future.delayed(const Duration(seconds: 5), () {
-
-      // });
-      //ShowCycle().showCycleOne(true);
     });
   }
 
@@ -88,13 +83,15 @@ class _MainPageState extends State<MainPage> {
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: const Color.fromARGB(255, 5, 59, 151),
-          leading: IconButton(
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/navigation');
-              },
-              icon: const Icon(Icons.dehaze_outlined)),
           title: const Text("Main"),
+          // leading: IconButton(
+          //     onPressed: () {
+          //       Navigator.pushReplacementNamed(context, '/navigation');
+          //     },
+          //     icon: const Icon(Icons.dehaze_outlined)),
+          // title: const Text("Main"),
         ),
+        drawer: const NavigationDrawer(),
         body: SafeArea(
           child: ListView(
             padding: const EdgeInsets.all(8.0),

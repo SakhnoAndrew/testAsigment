@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/widgets/build_show_line.dart';
 import 'package:flutter_application_1/widgets/build_search_text.dart';
 import 'package:flutter_application_1/domain/api_client.dart';
+import 'package:flutter_application_1/pages/navigation_draver.dart';
 
 class FavoritePage extends StatefulWidget {
   const FavoritePage({super.key});
@@ -67,13 +68,14 @@ class _FavoritePageState extends State<FavoritePage> {
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: const Color.fromARGB(255, 5, 59, 151),
-          leading: IconButton(
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/navigation');
-              },
-              icon: const Icon(Icons.dehaze_outlined)),
+          // leading: IconButton(
+          //     onPressed: () {
+          //       Navigator.pushReplacementNamed(context, '/navigation');
+          //     },
+          //     icon: const Icon(Icons.dehaze_outlined)),
           title: const Text("Favorite"),
         ),
+        drawer: const NavigationDrawer(),
         body: SafeArea(
           child: ListView(
             padding: const EdgeInsets.all(8.0),
