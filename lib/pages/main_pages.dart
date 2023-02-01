@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/domain/api_client.dart';
-import 'package:flutter_application_1/pages/navigation_draver.dart';
+import 'package:flutter_application_1/pages/navigation_drawer.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -22,7 +22,6 @@ class _MainPageState extends State<MainPage> {
   }
 
   Widget _buildSearchTextField() {
-    //widget for search text field
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: TextField(
@@ -42,7 +41,6 @@ class _MainPageState extends State<MainPage> {
   }
 
   Widget _buildShowLine() {
-    //widget for result search
     return Card(
       child: Row(
         children: [
@@ -84,24 +82,13 @@ class _MainPageState extends State<MainPage> {
         appBar: AppBar(
           backgroundColor: const Color.fromARGB(255, 5, 59, 151),
           title: const Text("Main"),
-          // leading: IconButton(
-          //     onPressed: () {
-          //       Navigator.pushReplacementNamed(context, '/navigation');
-          //     },
-          //     icon: const Icon(Icons.dehaze_outlined)),
-          // title: const Text("Main"),
         ),
-        drawer: const NavigationDrawer(),
+        drawer: const NavigationDrawerWidget(),
         body: SafeArea(
           child: ListView(
             padding: const EdgeInsets.all(8.0),
             children: [
               _buildSearchTextField(),
-              _buildShowLine(),
-              _buildShowLine(),
-              _buildShowLine(),
-              _buildShowLine(),
-              _buildShowLine(),
               _buildShowLine(),
             ],
           ),

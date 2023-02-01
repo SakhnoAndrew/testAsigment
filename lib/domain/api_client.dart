@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:ffi';
 import 'package:http/http.dart' as http;
 
 class ShowInfo {
@@ -43,7 +42,6 @@ class DataFetcher {
             ),
           )
           .toList();
-      print('object');
       return show;
     } else {
       throw Exception('Failed to load album');
