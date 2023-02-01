@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/domain/api_client.dart';
+import 'package:flutter_application_1/pages/navigation_drawer.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -13,21 +14,19 @@ class _MainPageState extends State<MainPage> {
   static String searchText = '';
   var dataFetcher = DataFetcher;
 
-  void _onSubmitted(String text) {
+  void onSubmitted(String text) {
     setState(() {
       searchText = text;
-      //dataFetcher.toString();
-      DataFetcher().getModels(searchText);
+      var model = DataFetcher().getModels(searchText);
     });
   }
 
-  Widget _buildSearchTextField() {
-    //widget for search text field
+  Widget searchTextFieldWidget() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: TextField(
         controller: controllerSearch,
-        onSubmitted: _onSubmitted,
+        onSubmitted: onSubmitted,
         keyboardType: TextInputType.name,
         style: Theme.of(context).textTheme.headline6,
         decoration: const InputDecoration(
@@ -41,8 +40,7 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  Widget _buildShowLine() {
-    //widget for result search
+  Widget showLineWidget() {
     return Card(
       child: Row(
         children: [
@@ -83,24 +81,15 @@ class _MainPageState extends State<MainPage> {
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: const Color.fromARGB(255, 5, 59, 151),
-          leading: IconButton(
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/navigation');
-              },
-              icon: const Icon(Icons.dehaze_outlined)),
           title: const Text("Main"),
         ),
+        drawer: const NavigationDrawerWidget(),
         body: SafeArea(
           child: ListView(
             padding: const EdgeInsets.all(8.0),
             children: [
-              _buildSearchTextField(),
-              _buildShowLine(),
-              _buildShowLine(),
-              _buildShowLine(),
-              _buildShowLine(),
-              _buildShowLine(),
-              _buildShowLine(),
+              searchTextFieldWidget(),
+              showLineWidget(),
             ],
           ),
         ),
