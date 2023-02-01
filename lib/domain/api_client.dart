@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ffi';
 import 'package:http/http.dart' as http;
 
 class ShowInfo {
@@ -11,7 +12,7 @@ class ShowInfo {
 class Show {
   final String name;
   final String language;
-  final Map<String, dynamic> image;
+  final dynamic image;
 
   Show({
     required this.name,
@@ -38,7 +39,7 @@ class DataFetcher {
             (e) => Show(
               name: e['name'] as String,
               language: e['language'] as String,
-              image: e['image'] as Map<String, dynamic>,
+              image: e['image'],
             ),
           )
           .toList();
