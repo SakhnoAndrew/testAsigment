@@ -7,30 +7,37 @@ Widget showLineWidget(
     child: Row(
       children: [
         Padding(
-          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+          padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
           child: CircleAvatar(
             backgroundImage: NetworkImage(imageURL),
             radius: 30,
           ),
         ),
         Padding(
-          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+          padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
           child: Text(
-            title,
-            style: TextStyle(fontSize: 20),
+            "Titile: $title",
+            style: const TextStyle(fontSize: 15),
           ),
         ),
         Padding(
-          padding: EdgeInsets.fromLTRB(10, 10, 60, 10),
-          child: Text(text),
+          padding: const EdgeInsets.fromLTRB(10, 10, 60, 10),
+          child: Text('Language: $text'),
         ),
-        IconButton(
-          onPressed: () {},
-          icon: const Icon(
-            Icons.heart_broken_outlined,
-            color: Colors.red,
+        const Spacer(),
+        Container(
+          width: 65,
+          height: 50,
+          child: Center(
+            child: IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.favorite_border,
+                color: Colors.red,
+              ),
+            ),
           ),
-        )
+        ),
       ],
     ),
   );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/domain/api_client.dart';
 import 'package:flutter_application_1/pages/navigation_drawer.dart';
+import 'package:flutter_application_1/widgets/show_line_widget.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -11,13 +12,11 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   final controllerSearch = TextEditingController();
-  static String searchText = '';
   var dataFetcher = DataFetcher;
 
   void onSubmitted(String text) {
     setState(() {
-      searchText = text;
-      var model = DataFetcher().getModels(searchText);
+      var model = DataFetcher().getModels(text);
     });
   }
 
@@ -25,7 +24,6 @@ class _MainPageState extends State<MainPage> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: TextField(
-        controller: controllerSearch,
         onSubmitted: onSubmitted,
         keyboardType: TextInputType.name,
         style: Theme.of(context).textTheme.headline6,
@@ -36,41 +34,6 @@ class _MainPageState extends State<MainPage> {
             borderRadius: BorderRadius.all(Radius.circular(40.0)),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget showLineWidget() {
-    return Card(
-      child: Row(
-        children: [
-          const Padding(
-            padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-            child: CircleAvatar(
-              backgroundImage: NetworkImage(
-                  "https://static.tvmaze.com/uploads/images/medium_portrait/31/78286.jpg"),
-              radius: 30,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-            child: Text(
-              searchText,
-              style: TextStyle(fontSize: 15),
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.fromLTRB(10, 10, 60, 10),
-            child: Text('Genre: Comedy'),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.heart_broken_outlined,
-              color: Colors.red,
-            ),
-          )
-        ],
       ),
     );
   }
