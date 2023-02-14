@@ -39,20 +39,21 @@ class _MainPageState extends State<MainPage> {
         );
       }
     }
-
     return widgets;
   }
 
   void onSubmitted(String text) async {
-    model = await DataFetcher().fetchShow(text);
-    setState(() {});
+    if (text.length >= 2) {
+      model = await DataFetcher().fetchShow(text);
+      setState(() {});
+    }
   }
 
   Widget searchTextFieldWidget() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: TextField(
-        onSubmitted: onSubmitted,
+        onChanged: onSubmitted,
         keyboardType: TextInputType.name,
         style: Theme.of(context).textTheme.headline6,
         decoration: const InputDecoration(
