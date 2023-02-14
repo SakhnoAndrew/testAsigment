@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget showLineWidget(
+Widget showLisetWidget(
     {String imageURL = "", String title = "", String text = ""}) {
   //widget for result search
   return Card(
@@ -13,16 +13,27 @@ Widget showLineWidget(
             radius: 30,
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-          child: Text(
-            "Titile: $title",
-            style: const TextStyle(fontSize: 15),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(10, 10, 60, 10),
-          child: Text('Language: $text'),
+        Column(
+          children: [
+            Container(
+              width: 200,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 10, 10, 10),
+                child: Text(
+                  title,
+                  textDirection: TextDirection.ltr,
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 10, 60, 10),
+                child: Text('Language: $text'),
+              ),
+            ),
+          ],
         ),
         const Spacer(),
         Container(

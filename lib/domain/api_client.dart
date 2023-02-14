@@ -11,7 +11,7 @@ class ShowInfo {
 class Show {
   final String name;
   final String language;
-  final dynamic image;
+  final Map? image;
 
   Show({
     required this.name,
@@ -21,9 +21,7 @@ class Show {
 }
 
 class DataFetcher {
-  Future<List<Show>> getModels(String searchText) async {
-    return await fetchShow(searchText);
-  }
+  List<Show> show = [];
 
   Future<List<Show>> fetchShow(String searchText) async {
     final response = await http
@@ -32,7 +30,6 @@ class DataFetcher {
       final data = json.decode(response.body) as List;
 
       var showInfo = data.map((e) => e["show"] as Map<String, dynamic>);
-
       var show = showInfo
           .map(
             (e) => Show(

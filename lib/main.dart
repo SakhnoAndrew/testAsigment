@@ -6,8 +6,8 @@ void main() => runApp(
       MaterialApp(
         initialRoute: '/',
         routes: {
-          '/': (context) => MainPage(),
-          '/favorite': (context) => FavoritePage(),
+          '/': (context) => const MainPage(),
+          '/favorite': (context) => const FavoritePage(),
         },
       ),
     );

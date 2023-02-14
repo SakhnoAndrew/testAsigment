@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_application_1/domain/api_client.dart';
 import 'package:flutter_application_1/pages/navigation_drawer.dart';
-import 'package:flutter_application_1/widgets/show_line_widget.dart';
+import 'package:flutter_application_1/widgets/show_liset_widget.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -12,12 +13,39 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   final controllerSearch = TextEditingController();
-  var dataFetcher = DataFetcher;
+  List<Show> model = [];
 
-  void onSubmitted(String text) {
-    setState(() {
-      var model = DataFetcher().getModels(text);
-    });
+  List<Widget> resultWidget(List<Show> model) {
+    List<Widget> widgets = [];
+
+    widgets.add(searchTextFieldWidget());
+
+    for (int i = 0; i < model.length - 1; i++) {
+      if (model[i].image == null) {
+        widgets.add(
+          showLisetWidget(
+            title: model[i].name,
+            text: model[i].language,
+            imageURL: "",
+          ),
+        );
+      } else {
+        widgets.add(
+          showLisetWidget(
+            title: model[i].name,
+            text: model[i].language,
+            imageURL: model[i].image?["medium"],
+          ),
+        );
+      }
+    }
+
+    return widgets;
+  }
+
+  void onSubmitted(String text) async {
+    model = await DataFetcher().fetchShow(text);
+    setState(() {});
   }
 
   Widget searchTextFieldWidget() {
@@ -50,10 +78,7 @@ class _MainPageState extends State<MainPage> {
         body: SafeArea(
           child: ListView(
             padding: const EdgeInsets.all(8.0),
-            children: [
-              searchTextFieldWidget(),
-              showLineWidget(),
-            ],
+            children: resultWidget(model),
           ),
         ),
       ),
