@@ -15,6 +15,9 @@ class _MainPageState extends State<MainPage> {
   final controllerSearch = TextEditingController();
   List<Show> model = [];
 
+  ///////////////////////
+
+  ////////////////////////
   List<Widget> resultWidget(List<Show> model) {
     List<Widget> widgets = [];
 
@@ -23,7 +26,7 @@ class _MainPageState extends State<MainPage> {
     for (int i = 0; i < model.length - 1; i++) {
       if (model[i].image == null) {
         widgets.add(
-          showLisetWidget(
+          ShowLisetWidget(
             title: model[i].name,
             text: model[i].language,
             imageURL: "",
@@ -31,7 +34,7 @@ class _MainPageState extends State<MainPage> {
         );
       } else {
         widgets.add(
-          showLisetWidget(
+          ShowLisetWidget(
             title: model[i].name,
             text: model[i].language,
             imageURL: model[i].image?["medium"],
@@ -42,18 +45,26 @@ class _MainPageState extends State<MainPage> {
     return widgets;
   }
 
-  void onSubmitted(String text) async {
+/////////////////////////////////////////////
+  void onChange(String text) async {
     if (text.length >= 2) {
       model = await DataFetcher().fetchShow(text);
       setState(() {});
     }
   }
 
+  void onSubmitted(String text) async {
+    model = await DataFetcher().fetchShow(text);
+    setState(() {});
+  }
+
+/////////////////////////////////////////////
   Widget searchTextFieldWidget() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: TextField(
-        onChanged: onSubmitted,
+        //onChanged: onChange,
+        onSubmitted: onSubmitted,
         keyboardType: TextInputType.name,
         style: Theme.of(context).textTheme.headline6,
         decoration: const InputDecoration(
