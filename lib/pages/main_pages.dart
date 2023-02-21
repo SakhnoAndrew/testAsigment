@@ -15,8 +15,6 @@ class _MainPageState extends State<MainPage> {
   final controllerSearch = TextEditingController();
   List<Show> model = [];
 
-  ///////////////////////
-
   ////////////////////////
   List<Widget> resultWidget(List<Show> model) {
     List<Widget> widgets = [];
@@ -24,23 +22,16 @@ class _MainPageState extends State<MainPage> {
     widgets.add(searchTextFieldWidget());
 
     for (int i = 0; i < model.length - 1; i++) {
-      if (model[i].image == null) {
-        widgets.add(
-          ShowLisetWidget(
-            title: model[i].name,
-            text: model[i].language,
-            imageURL: "",
-          ),
-        );
-      } else {
-        widgets.add(
-          ShowLisetWidget(
-            title: model[i].name,
-            text: model[i].language,
-            imageURL: model[i].image?["medium"],
-          ),
-        );
-      }
+      String imageVariable = "";
+      if (model[i].image != null) imageVariable = model[i].image?["medium"];
+
+      widgets.add(
+        ShowLisetWidget(
+          title: model[i].name,
+          text: model[i].language,
+          imageURL: imageVariable,
+        ),
+      );
     }
     return widgets;
   }
@@ -48,12 +39,16 @@ class _MainPageState extends State<MainPage> {
 /////////////////////////////////////////////
   void onChange(String text) async {
     if (text.length >= 2) {
+      model.clear();
+      setState(() {});
       model = await DataFetcher().fetchShow(text);
       setState(() {});
     }
   }
 
   void onSubmitted(String text) async {
+    model.clear();
+    setState(() {});
     model = await DataFetcher().fetchShow(text);
     setState(() {});
   }
@@ -63,8 +58,8 @@ class _MainPageState extends State<MainPage> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: TextField(
-        //onChanged: onChange,
-        onSubmitted: onSubmitted,
+        onChanged: onChange,
+        //onSubmitted: onSubmitted,
         keyboardType: TextInputType.name,
         style: Theme.of(context).textTheme.headline6,
         decoration: const InputDecoration(
