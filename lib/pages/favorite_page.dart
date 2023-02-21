@@ -40,7 +40,7 @@ class _FavoritePageState extends State<FavoritePage> {
             stream: shows,
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (!snapshot.hasData) return Text('No records');
+              if (!snapshot.hasData) return const Text('No records');
               final shows = snapshot.requireData;
 
               return ListView.builder(

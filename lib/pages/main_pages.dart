@@ -19,8 +19,6 @@ class _MainPageState extends State<MainPage> {
   List<Widget> resultWidget(List<Show> model) {
     List<Widget> widgets = [];
 
-    widgets.add(searchTextFieldWidget());
-
     for (int i = 0; i < model.length - 1; i++) {
       String imageVariable = "";
       if (model[i].image != null) imageVariable = model[i].image?["medium"];
@@ -65,6 +63,8 @@ class _MainPageState extends State<MainPage> {
         decoration: const InputDecoration(
           prefixIcon: Icon(Icons.search),
           labelText: 'Enter show',
+          filled: true,
+          fillColor: Colors.white,
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(40.0)),
           ),
@@ -82,12 +82,16 @@ class _MainPageState extends State<MainPage> {
           title: const Text("Main"),
         ),
         drawer: const NavigationDrawerWidget(),
-        body: SafeArea(
-          child: ListView(
-            padding: const EdgeInsets.all(8.0),
+        body: Stack(children: [
+          ListView(
+            padding: const EdgeInsets.only(top: 80),
             children: resultWidget(model),
           ),
-        ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: searchTextFieldWidget(),
+          )
+        ]),
       ),
     );
   }

@@ -14,7 +14,7 @@ class ShowLisetWidget extends StatefulWidget {
 
   @override
   State<ShowLisetWidget> createState() =>
-      _ShowLisetWidgetState(this.imageURL, this.title, this.text);
+      _ShowLisetWidgetState(imageURL, title, text);
 }
 
 class _ShowLisetWidgetState extends State<ShowLisetWidget> {
