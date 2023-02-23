@@ -38,7 +38,7 @@ class _FavoritePageState extends State<FavoritePage> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                         child: CircleAvatar(
-                          backgroundImage: NetworkImage(document!['imageURL']),
+                          backgroundImage: NetworkImage(document['imageURL']),
                           radius: 30,
                         ),
                       ),

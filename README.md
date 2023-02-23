@@ -1,16 +1,24 @@
-# flutter_application_1
+# Test assigment
 
-A new Flutter project.
+This project is for searching shows by title. It is also possible to add and remove shows to the Favorite list.
 
-## Getting Started
+## Pages
 
-This project is a starting point for a Flutter application.
+This project is for searching shows by title. It is also possible to add and remove shows to the Favorite list.
 
-A few resources to get you started if this is your first Flutter project:
+The application have a 3 pages: main_page, favorite_page and splash_screen.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+On main_page, the ability to search for shows and add to the firebase firestore database is implemented. When you enter a value in the TextField, a request is sent to the API and returns a JSON file. The data from this file is passed to the list of widgets.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+The  favorite_page contains a list of widgets and implements a function to retrieve records in the database.
+
+Splash_screen is an animated splash screen.
+
+## Technologies
+
+The following technologies were used in the project:
+
+1. Flutter;
+2. Firebase Firestore;
+3. Shared Preferences;
+4. Animated splash screen.
