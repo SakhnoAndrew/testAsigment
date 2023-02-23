@@ -30,6 +30,7 @@ class _FavoritePageState extends State<FavoritePage> {
               itemCount: snapshot.data?.docs.length,
               itemBuilder: (BuildContext context, int index) {
                 final document = snapshot.data?.docs[index];
+                String language = document!['text'];
 
                 return Card(
                   child: Row(
@@ -58,7 +59,7 @@ class _FavoritePageState extends State<FavoritePage> {
                           Center(
                             child: Padding(
                               padding: const EdgeInsets.fromLTRB(0, 10, 60, 10),
-                              child: Text(document['text']),
+                              child: Text('Language: $language'),
                             ),
                           ),
                         ],
