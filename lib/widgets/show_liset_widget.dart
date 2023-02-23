@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-//import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class ShowLisetWidget extends StatefulWidget {
@@ -33,12 +32,6 @@ class _ShowLisetWidgetState extends State<ShowLisetWidget> {
 
   @override
   Widget build(BuildContext context) {
-    //   return showLisetWidget();
-    // }
-
-    // Widget showLisetWidget(
-    //     {String imageURL = "", String title = "", String text = ""}) {
-    //   dynamic buttonFilling = Icons.favorite_border;
     return Card(
       child: Row(
         children: [
@@ -85,7 +78,6 @@ class _ShowLisetWidgetState extends State<ShowLisetWidget> {
                           {'title': title, 'text': text, 'imageURL': imageURL});
                     } else {
                       buttonFilling = Icons.favorite_border;
-                      //FirebaseFirestore.instance.collection('shows').doc(snapshot.doc.)
                     }
                   });
                 },

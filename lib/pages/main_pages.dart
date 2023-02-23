@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/domain/api_client.dart';
 import 'package:flutter_application_1/pages/navigation_drawer.dart';
 import 'package:flutter_application_1/widgets/show_liset_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -14,8 +15,48 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   final controllerSearch = TextEditingController();
   List<Show> model = [];
+  static const textKey = 'text';
 
-  ////////////////////////
+  @override
+  void initState() {
+    startShowsBilding();
+    super.initState();
+  }
+
+  void startShowsBilding() async {
+    var text = await getText();
+    model = await DataFetcher().fetchShow(text);
+    setState(() {});
+  }
+
+  Future setText(String text) async {
+    var pref = await SharedPreferences.getInstance();
+    pref.setString(textKey, text);
+  }
+
+  Future<String> getText() async {
+    var pref = await SharedPreferences.getInstance();
+    return pref.getString(textKey) ?? "";
+  }
+
+  void onChange(String text) async {
+    if (text.length >= 2) {
+      model.clear();
+      setState(() {});
+      model = await DataFetcher().fetchShow(text);
+      setText(text);
+      setState(() {});
+    }
+  }
+
+  void onSubmitted(String text) async {
+    model.clear();
+    setState(() {});
+    model = await DataFetcher().fetchShow(text);
+    setText(text);
+    setState(() {});
+  }
+
   List<Widget> resultWidget(List<Show> model) {
     List<Widget> widgets = [];
 
@@ -34,30 +75,12 @@ class _MainPageState extends State<MainPage> {
     return widgets;
   }
 
-/////////////////////////////////////////////
-  void onChange(String text) async {
-    if (text.length >= 2) {
-      model.clear();
-      setState(() {});
-      model = await DataFetcher().fetchShow(text);
-      setState(() {});
-    }
-  }
-
-  void onSubmitted(String text) async {
-    model.clear();
-    setState(() {});
-    model = await DataFetcher().fetchShow(text);
-    setState(() {});
-  }
-
-/////////////////////////////////////////////
   Widget searchTextFieldWidget() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: TextField(
         onChanged: onChange,
-        //onSubmitted: onSubmitted,
+        onSubmitted: onSubmitted,
         keyboardType: TextInputType.name,
         style: Theme.of(context).textTheme.headline6,
         decoration: const InputDecoration(
