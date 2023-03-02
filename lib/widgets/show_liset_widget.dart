@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import 'package:flutter_application_1/domain/hive_model.dart';
+
 class ShowLisetWidget extends StatefulWidget {
   final String imageURL;
   final String title;
@@ -29,6 +31,8 @@ class _ShowLisetWidgetState extends State<ShowLisetWidget> {
     buttonFilling = Icons.favorite_border;
     super.initState();
   }
+
+  final model = HiveWidgetModel();
 
   @override
   Widget build(BuildContext context) {
@@ -74,8 +78,9 @@ class _ShowLisetWidgetState extends State<ShowLisetWidget> {
                   setState(() {
                     if (buttonFilling == Icons.favorite_border) {
                       buttonFilling = Icons.favorite;
-                      FirebaseFirestore.instance.collection('shows').add(
-                          {'title': title, 'text': text, 'imageURL': imageURL});
+                      model.test(title, text, imageURL);
+                      // FirebaseFirestore.instance.collection('shows').add(
+                      //     {'title': title, 'text': text, 'imageURL': imageURL});
                     } else {
                       buttonFilling = Icons.favorite_border;
                     }
