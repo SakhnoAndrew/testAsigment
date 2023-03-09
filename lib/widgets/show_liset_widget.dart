@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+//import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_application_1/domain/hive_model.dart';
@@ -75,12 +75,13 @@ class _ShowLisetWidgetState extends State<ShowLisetWidget> {
             child: Center(
               child: IconButton(
                 onPressed: () {
+                  //dynamic ret = await model.nameReturn(0);
                   setState(() {
                     if (buttonFilling == Icons.favorite_border) {
                       buttonFilling = Icons.favorite;
-                      model.test(title, text, imageURL);
-                      // FirebaseFirestore.instance.collection('shows').add(
-                      //     {'title': title, 'text': text, 'imageURL': imageURL});
+                      model.saveShow(title, text, imageURL);
+
+                      // print(ret);
                     } else {
                       buttonFilling = Icons.favorite_border;
                     }

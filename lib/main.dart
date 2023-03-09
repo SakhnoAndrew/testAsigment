@@ -9,8 +9,9 @@ import 'package:flutter_application_1/pages/favorite_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Hive.initFlutter();
+  await Hive.initFlutter();
   Hive.registerAdapter(ShowHiveAdapter());
+  await Hive.openBox<ShowHive>('showBox');
 
   runApp(
     MaterialApp(
