@@ -1,67 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'dart:async';
-
-import 'package:http/http.dart';
 
 class HiveWidgetModel {
-  void openBox() async {
-    await Hive.openBox<ShowHive>('showBox');
-    //final box = Hive.box<ShowHive>('showBox');
-  }
-
-  //var boxLengtn;
-  //Hive.openBox<ShowHive>('showBox');
-  //final box =  Hive.openBox<ShowHive>('showBox');
   final box = Hive.box<ShowHive>('showBox');
-
-  //final box = await Hive.openBox<ShowHive>('showBox');
-
-  Stream<List<ShowHive>> get showsStream =>
-      box.watch().map((event) => event.value.toList());
 
   void saveShow(String name, String language, String image) async {
     final box = await Hive.openBox<ShowHive>('showBox');
 
     final showHive = ShowHive(name: name, language: language, image: image);
     await box.add(showHive);
-    //boxLengtn = box.length;
-    //box.close();
-    //box.clear();
-    //print(box.values);
-    //await box.clear();
-    //print('------------------------------------');
-
-    // var showinfo = box.getAt(0);
-    // print(showinfo);
-    //   print(showinfo);
-    //await box.add(showHive);
-    //---------------------
-    // print('------------------------------------');
-    // print(box.values);
-    // print('------------------------------------');
-
-    // for (int i = 0; i < box.length; i++) {
-    //   final showinfo = box.getAt(i);
-    //   var imagee = showinfo?.image;
-    //   var namee = showinfo?.name;
-    //   var lang = showinfo?.language;
-    //   print('$i. Name: $namee, Language: $lang, Image: $imagee');
-    // }
   }
 
-  // Future<int> favotiteLength() async {
-  //   final box = await Hive.openBox<ShowHive>('showBox');
-  //   return box.length;
-  // }
+  int checkingForFavorite(String name, String language, String image) {
+    int counter = 0;
+    for (int index = 0; index < box.length; index++) {
+      final showinfo = box.getAt(index);
+      var linkImage = showinfo?.image ?? '';
+      var showName = showinfo?.name;
+      var showLanguage = showinfo?.language;
 
-//   Future<String> nameReturn(int index) async {
-//     final box = await Hive.openBox<ShowHive>('showBox');
-//     final showInBox = box.getAt(index);
-//     //box.close();
-//     return showInBox!.name;
-//   }
+      if (name == showName && language == showLanguage && image == linkImage) {
+        counter++;
+      }
+    }
+    return counter;
+  }
+
+  void deleteShow(String name, String language, String image) {
+    for (int index = 0; index < box.length; index++) {
+      final showinfo = box.getAt(index);
+      var linkImage = showinfo?.image ?? '';
+      var showName = showinfo?.name;
+      var showLanguage = showinfo?.language;
+
+      if (name == showName && language == showLanguage && image == linkImage) {
+        box.deleteAt(index);
+      }
+    }
+  }
 }
 
 class ShowHive {
@@ -87,7 +64,7 @@ class ShowHiveAdapter extends TypeAdapter<ShowHive> {
     final name = reader.readString();
     final language = reader.readString();
     final image = reader.readString();
-    return ShowHive(name: '$name', language: '$language', image: '$image');
+    return ShowHive(name: name, language: language, image: image);
   }
 
   @override
@@ -98,7 +75,6 @@ class ShowHiveAdapter extends TypeAdapter<ShowHive> {
   }
 }
 
-//////////////////////////
 class ShowProvider extends InheritedNotifier {
   final HiveWidgetModel model;
   const ShowProvider({Key? key, required Widget child, required this.model})

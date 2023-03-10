@@ -1,4 +1,3 @@
-//import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_application_1/domain/hive_model.dart';
@@ -36,6 +35,10 @@ class _ShowLisetWidgetState extends State<ShowLisetWidget> {
 
   @override
   Widget build(BuildContext context) {
+    int comparasion = model.checkingForFavorite(title, text, imageURL);
+    if (comparasion != 0) {
+      buttonFilling = Icons.favorite;
+    }
     return Card(
       child: Row(
         children: [
@@ -75,17 +78,15 @@ class _ShowLisetWidgetState extends State<ShowLisetWidget> {
             child: Center(
               child: IconButton(
                 onPressed: () {
-                  //dynamic ret = await model.nameReturn(0);
-                  setState(() {
-                    if (buttonFilling == Icons.favorite_border) {
-                      buttonFilling = Icons.favorite;
-                      model.saveShow(title, text, imageURL);
-
-                      // print(ret);
-                    } else {
-                      buttonFilling = Icons.favorite_border;
-                    }
-                  });
+                  if (comparasion == 0) {
+                    buttonFilling = Icons.favorite;
+                    model.saveShow(title, text, imageURL);
+                    setState(() {});
+                  } else {
+                    model.deleteShow(title, text, imageURL);
+                    buttonFilling = Icons.favorite_border;
+                    setState(() {});
+                  }
                 },
                 style:
                     IconButton.styleFrom(disabledForegroundColor: Colors.red),

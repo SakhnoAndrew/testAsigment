@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:hive/hive.dart';
 
 import 'package:flutter_application_1/domain/hive_model.dart';
 import 'package:flutter_application_1/pages/splash_screen.dart';
