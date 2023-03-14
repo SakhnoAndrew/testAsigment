@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/domain/api_client.dart';
 import 'package:flutter_application_1/pages/navigation_drawer.dart';
 import 'package:flutter_application_1/widgets/show_liset_widget.dart';
+import 'package:flutter_application_1/widgets/search_text_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MainPage extends StatefulWidget {
@@ -19,43 +20,43 @@ class _MainPageState extends State<MainPage> {
 
   @override
   void initState() {
-    startShowsBilding();
+    // startShowsBilding();
     super.initState();
   }
 
-  void startShowsBilding() async {
-    var text = await getText();
-    model = await DataFetcher().fetchShow(text);
-    setState(() {});
-  }
+  // void startShowsBilding() async {
+  //   var text = await getText();
+  //   model = await DataFetcher().fetchShow(text);
+  //   setState(() {});
+  // }
 
-  Future setText(String text) async {
-    var pref = await SharedPreferences.getInstance();
-    pref.setString(textKey, text);
-  }
+  // Future setText(String text) async {
+  //   var pref = await SharedPreferences.getInstance();
+  //   pref.setString(textKey, text);
+  // }
 
-  Future<String> getText() async {
-    var pref = await SharedPreferences.getInstance();
-    return pref.getString(textKey) ?? "";
-  }
+  // Future<String> getText() async {
+  //   var pref = await SharedPreferences.getInstance();
+  //   return pref.getString(textKey) ?? "";
+  // }
 
-  void onChange(String text) async {
-    if (text.length >= 2) {
-      model.clear();
-      setState(() {});
-      model = await DataFetcher().fetchShow(text);
-      setText(text);
-      setState(() {});
-    }
-  }
+  // void onChange(String text) async {
+  //   if (text.length >= 2) {
+  //     model.clear();
+  //     setState(() {});
+  //     model = await DataFetcher().fetchShow(text);
+  //     setText(text);
+  //     setState(() {});
+  //   }
+  // }
 
-  void onSubmitted(String text) async {
-    model.clear();
-    setState(() {});
-    model = await DataFetcher().fetchShow(text);
-    setText(text);
-    setState(() {});
-  }
+  // void onSubmitted(String text) async {
+  //   model.clear();
+  //   setState(() {});
+  //   model = await DataFetcher().fetchShow(text);
+  //   setText(text);
+  //   setState(() {});
+  // }
 
   List<Widget> resultWidget(List<Show> model) {
     List<Widget> widgets = [];
@@ -75,26 +76,26 @@ class _MainPageState extends State<MainPage> {
     return widgets;
   }
 
-  Widget searchTextFieldWidget() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-      child: TextField(
-        onChanged: onChange,
-        onSubmitted: onSubmitted,
-        keyboardType: TextInputType.name,
-        style: Theme.of(context).textTheme.headline6,
-        decoration: const InputDecoration(
-          prefixIcon: Icon(Icons.search),
-          labelText: 'Enter show',
-          filled: true,
-          fillColor: Colors.white,
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(40.0)),
-          ),
-        ),
-      ),
-    );
-  }
+  // searchTextFieldWidget() {
+  //   return Padding(
+  //     padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+  //     child: TextField(
+  //       onChanged: onChange,
+  //       onSubmitted: onSubmitted,
+  //       keyboardType: TextInputType.name,
+  //       style: Theme.of(context).textTheme.titleLarge,
+  //       decoration: const InputDecoration(
+  //         prefixIcon: Icon(Icons.search),
+  //         labelText: 'Enter show',
+  //         filled: true,
+  //         fillColor: Colors.white,
+  //         enabledBorder: OutlineInputBorder(
+  //           borderRadius: BorderRadius.all(Radius.circular(40.0)),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -110,9 +111,9 @@ class _MainPageState extends State<MainPage> {
             padding: const EdgeInsets.only(top: 80),
             children: resultWidget(model),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: searchTextFieldWidget(),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: SearchTextWidget(),
           )
         ]),
       ),

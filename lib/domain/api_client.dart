@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class ShowInfo {
@@ -43,5 +44,23 @@ class DataFetcher {
     } else {
       throw Exception('Failed to load album');
     }
+  }
+}
+
+class DataFetcherProvider extends InheritedNotifier {
+  final DataFetcher model;
+  const DataFetcherProvider(
+      {Key? key, required Widget child, required this.model})
+      : super(key: key, child: child);
+
+  static DataFetcherProvider? watch(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<DataFetcherProvider>();
+  }
+
+  static DataFetcherProvider? read(BuildContext context) {
+    final widget = context
+        .getElementForInheritedWidgetOfExactType<DataFetcherProvider>()
+        ?.widget;
+    return widget is DataFetcherProvider ? widget : null;
   }
 }
