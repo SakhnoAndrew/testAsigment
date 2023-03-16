@@ -122,7 +122,6 @@ class _ShowLisetWidgetState extends State<ShowLisetWidget> {
                       'text': text,
                       'imageURL': imageURL
                     });
-
                     //model.saveShow(title, text, imageURL);
                     setState(() {});
                   } else {
