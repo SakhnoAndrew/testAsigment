@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/domain/api_client.dart';
 import 'package:flutter_application_1/pages/navigation_drawer.dart';
 import 'package:flutter_application_1/widgets/show_liset_widget.dart';
+import 'package:flutter_application_1/domain/favorite_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MainPage extends StatefulWidget {
@@ -16,12 +17,32 @@ class _MainPageState extends State<MainPage> {
   final controllerSearch = TextEditingController();
   List<Show> model = [];
   static const textKey = 'text';
+  final fireModel = FirecloudeEssense();
+  List<FavoriteModel>? data;
 
   @override
   void initState() {
+    //   getData();
     startShowsBilding();
     super.initState();
   }
+
+  // void getData() async {
+  //   data = await fireModel.getDataFromFirestore();
+  //   print("object");
+  // }
+
+  // int checkingForFavorite(int id) {
+  //   int counter = 0;
+
+  //   for (int index = 0; index < data!.length; index++) {
+  //     var showId = data?[index].id ?? 0;
+  //     if (id == showId) {
+  //       counter++;
+  //     }
+  //   }
+  //   return counter;
+  // }
 
   void startShowsBilding() async {
     var text = await getText();
@@ -41,11 +62,13 @@ class _MainPageState extends State<MainPage> {
 
   void onChange(String text) async {
     if (text.length >= 2) {
-      model.clear();
-      setState(() {});
-      model = await DataFetcher().fetchShow(text);
-      setText(text);
-      setState(() {});
+      Future.delayed(const Duration(milliseconds: 750), () async {
+        model.clear();
+        setState(() {});
+        model = await DataFetcher().fetchShow(text);
+        setText(text);
+        setState(() {});
+      });
     }
   }
 
@@ -66,6 +89,7 @@ class _MainPageState extends State<MainPage> {
 
       widgets.add(
         ShowLisetWidget(
+          id: model[i].id,
           title: model[i].name,
           text: model[i].language,
           imageURL: imageVariable,

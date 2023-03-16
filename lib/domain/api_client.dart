@@ -9,11 +9,13 @@ class ShowInfo {
 }
 
 class Show {
+  final int id;
   final String name;
   final String language;
   final Map? image;
 
   Show({
+    required this.id,
     required this.name,
     required this.language,
     required this.image,
@@ -33,6 +35,7 @@ class DataFetcher {
       var show = showInfo
           .map(
             (e) => Show(
+              id: e['id'] as int,
               name: e['name'] as String,
               language: e['language'] as String,
               image: e['image'],
