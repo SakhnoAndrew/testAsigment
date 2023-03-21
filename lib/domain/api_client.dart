@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_application_1/constants.dart';
 
 class ShowInfo {
   final Show showInfo;
@@ -44,7 +45,7 @@ class DataFetcher {
           .toList();
       return show;
     } else {
-      throw Exception('Failed to load album');
+      throw Exception(Constants.apiExeption);
     }
   }
 }

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flutter_application_1/domain/api_client.dart';
 import 'package:flutter_application_1/pages/navigation_drawer.dart';
 import 'package:flutter_application_1/widgets/show_liset_widget.dart';
 import 'package:flutter_application_1/domain/favorite_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_application_1/constants.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -18,7 +19,7 @@ class _MainPageState extends State<MainPage> {
   List<Show> model = [];
   static const textKey = 'text';
   final fireModel = FirecloudeEssense();
-  List<FavoriteModel>? data;
+  //List<FavoriteModel>? data;
 
   @override
   void initState() {
@@ -109,7 +110,7 @@ class _MainPageState extends State<MainPage> {
         style: Theme.of(context).textTheme.headline6,
         decoration: const InputDecoration(
           prefixIcon: Icon(Icons.search),
-          labelText: 'Enter show',
+          labelText: Constants.enterShow,
           filled: true,
           fillColor: Colors.white,
           enabledBorder: OutlineInputBorder(
@@ -125,8 +126,8 @@ class _MainPageState extends State<MainPage> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 5, 59, 151),
-          title: const Text("Main"),
+          backgroundColor: Constants.appbarBackgroungColor,
+          title: const Text(Constants.mainTitle),
         ),
         drawer: const NavigationDrawerWidget(),
         body: Stack(children: [

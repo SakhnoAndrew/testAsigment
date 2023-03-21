@@ -2,6 +2,7 @@ import 'dart:core';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/navigation_drawer.dart';
+import 'package:flutter_application_1/constants.dart';
 
 class FavoritePage extends StatefulWidget {
   const FavoritePage({super.key});
@@ -24,7 +25,7 @@ class _FavoritePageState extends State<FavoritePage> {
           stream: FirebaseFirestore.instance.collection('shows').snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (!snapshot.hasData) return const Text('Loading...');
+            if (!snapshot.hasData) return const Text(Constants.loading);
 
             return ListView.builder(
               itemCount: snapshot.data?.docs.length,
@@ -59,7 +60,7 @@ class _FavoritePageState extends State<FavoritePage> {
                           Center(
                             child: Padding(
                               padding: const EdgeInsets.fromLTRB(0, 10, 60, 10),
-                              child: Text('Language: $language'),
+                              child: Text('${Constants.language} $language'),
                             ),
                           ),
                         ],
@@ -77,10 +78,11 @@ class _FavoritePageState extends State<FavoritePage> {
                                   .delete();
                             },
                             style: IconButton.styleFrom(
-                                disabledForegroundColor: Colors.red),
+                                disabledForegroundColor:
+                                    Constants.favoriteButtonColor),
                             icon: const Icon(
                               Icons.favorite,
-                              color: Colors.red,
+                              color: Constants.favoriteButtonColor,
                             ),
                           ),
                         ),

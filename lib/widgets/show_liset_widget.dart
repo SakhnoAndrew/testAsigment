@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 //import 'package:flutter_application_1/pages/main_pages.dart';
 import 'package:flutter_application_1/domain/favorite_model.dart';
+import 'package:flutter_application_1/constants.dart';
+import 'package:flutter_application_1/domain/hive_model.dart';
 
 class ShowLisetWidget extends StatefulWidget {
   final int id;
@@ -34,8 +36,9 @@ class _ShowLisetWidgetState extends State<ShowLisetWidget> {
   );
 
   late IconData buttonFilling;
-  List<FavoriteModel>? data;
+  List<ShowHive>? data;
   final fireModel = FirecloudeEssense();
+  final hiveModel = HiveWidgetModel();
   //final model = MainPage();
 
   @override
@@ -47,7 +50,7 @@ class _ShowLisetWidgetState extends State<ShowLisetWidget> {
 
   void getData() async {
     data = await fireModel.getDataFromFirestore();
-    print("object");
+    // print("object");
   }
 
   int checkingForFavorite(int id) {
@@ -96,7 +99,7 @@ class _ShowLisetWidgetState extends State<ShowLisetWidget> {
               Center(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(0, 10, 60, 10),
-                  child: Text('Language: $text'),
+                  child: Text('${Constants.language} $text'),
                 ),
               ),
             ],
@@ -110,12 +113,16 @@ class _ShowLisetWidgetState extends State<ShowLisetWidget> {
                 onPressed: () {
                   if (comparasion == 0) {
                     buttonFilling = Icons.favorite;
+
+                    hiveModel.saveShow(id, title, text, imageURL);
+
                     FirebaseFirestore.instance.collection('shows').add({
                       'id': id,
                       'title': title,
                       'text': text,
                       'imageURL': imageURL
                     });
+
                     //model.saveShow(title, text, imageURL);
                     setState(() {});
                   } else {
@@ -138,11 +145,11 @@ class _ShowLisetWidgetState extends State<ShowLisetWidget> {
                   //   }
                   // });
                 },
-                style:
-                    IconButton.styleFrom(disabledForegroundColor: Colors.red),
+                style: IconButton.styleFrom(
+                    disabledForegroundColor: Constants.favoriteButtonColor),
                 icon: Icon(
                   buttonFilling,
-                  color: Colors.red,
+                  color: Constants.favoriteButtonColor,
                 ),
               ),
             ),

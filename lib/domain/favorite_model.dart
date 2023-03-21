@@ -1,58 +1,88 @@
 import 'dart:core';
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
+// import 'package:firebase_core/firebase_core.dart';
+// import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:flutter_application_1/domain/hive_model.dart';
 
-class FavoriteModel {
-  final int? id;
-  final String? name;
-  final String? language;
-  final String? image;
+// class FavoriteModel {
+//   final int? id;
+//   final String? name;
+//   final String? language;
+//   final String? image;
 
-  FavoriteModel({
-    required this.id,
-    required this.name,
-    required this.language,
-    required this.image,
-  });
+//   FavoriteModel({
+//     required this.id,
+//     required this.name,
+//     required this.language,
+//     required this.image,
+//   });
 
-  factory FavoriteModel.fromFirestore(DocumentSnapshot doc) {
-    dynamic data = doc.data();
-    return FavoriteModel(
-      id: data['id'],
-      name: data['title'],
-      language: data['text'],
-      image: data['imageURL'],
-    );
-  }
+//   factory FavoriteModel.fromFirestore(DocumentSnapshot doc) {
+//     dynamic data = doc.data();
+//     return FavoriteModel(
+//       id: data['id'],
+//       name: data['title'],
+//       language: data['text'],
+//       image: data['imageURL'],
+//     );
+//   }
 
-  // factory FavoriteModel.fromMap(Map<String, dynamic> data) {
-  //   final int id = data['id'];
-  //   final String name = data['name'];
-  //   final String language = data['language'];
-  //   final String? image = data['image'];
-  //   return FavoriteModel(id: id, name: name, language: language, image: image);
-  // }
-}
+//   // factory FavoriteModel.fromMap(Map<String, dynamic> data) {
+//   //   final int id = data['id'];
+//   //   final String name = data['name'];
+//   //   final String language = data['language'];
+//   //   final String? image = data['image'];
+//   //   return FavoriteModel(id: id, name: name, language: language, image: image);
+//   // }
+// }
 
 class FirecloudeEssense {
-  //List<FavoriteModel>? favoriteModel;
+  final box = Hive.box<ShowHive>('showBox');
 
-  Future<List<FavoriteModel>> getDataFromFirestore() async {
+  Future<List<ShowHive>> getDataFromFirestore() async {
     QuerySnapshot snapshot =
         await FirebaseFirestore.instance.collection('shows').get();
-
-    List<FavoriteModel> data = snapshot.docs.map((doc) {
-      return FavoriteModel.fromFirestore(doc);
+    List<ShowHive> data = snapshot.docs.map((doc) {
+      return ShowHive.fromFirestore(doc);
     }).toList();
-
-    // for (int i = 0; i < data.length; i++) {
-    //   print(data[i].id);
-    //   print(data[i].name);
-    //   print(data[i].language);
-    //   print(data[i].image);
-    // }
     return data;
+  }
+
+  void hiveBoxFilling(List<ShowHive> data) async {
+    for (int i = 0; i < data.length; i++) {
+      final showHive = ShowHive(
+          id: data[i].id,
+          name: data[i].name,
+          language: data[i].language,
+          image: data[i].image);
+      await box.put(i, showHive);
+    }
+  }
+
+  void hiveBoxClear() async {
+    await box.clear();
+  }
+
+  bool checkingForChange(List<ShowHive> data) {
+    bool flag = true;
+    int count = 0;
+
+    if (data.length == box.length) {
+      int countLenght = data.length;
+      for (int i = 0; i < data.length; i++) {
+        final boxInfo = box.getAt(i);
+        if (data[i].id == boxInfo?.id) {
+          count++;
+        }
+      }
+      if (count == countLenght) {
+        flag = false;
+      }
+    }
+    return flag;
   }
 
   // int checkingForFavorite (int id){
