@@ -19,18 +19,27 @@ class _MainPageState extends State<MainPage> {
   List<Show> model = [];
   static const textKey = 'text';
   final fireModel = FirecloudeEssense();
+  TextEditingController? controller = TextEditingController(text: '');
+  //bool compare = false;
   //List<FavoriteModel>? data;
 
   @override
   void initState() {
     //   getData();
     startShowsBilding();
+    fireModel.compareDataFireHive();
+    // print(compare);
+    // print("object");
     super.initState();
   }
 
-  // void getData() async {
-  //   data = await fireModel.getDataFromFirestore();
-  //   print("object");
+  // void compareDataFireHive() async {
+  //   var compare = await fireModel.compareData();
+  //   if (compare == false) {
+  //     fireModel.hiveBoxClear();
+  //     final data = await fireModel.getDataFromFirestore();
+  //     fireModel.hiveBoxFilling(data);
+  //   }
   // }
 
   // int checkingForFavorite(int id) {
@@ -47,6 +56,7 @@ class _MainPageState extends State<MainPage> {
 
   void startShowsBilding() async {
     var text = await getText();
+    controller = TextEditingController(text: text);
     model = await DataFetcher().fetchShow(text);
     setState(() {});
   }
@@ -63,13 +73,16 @@ class _MainPageState extends State<MainPage> {
 
   void onChange(String text) async {
     if (text.length >= 2) {
-      Future.delayed(const Duration(milliseconds: 750), () async {
-        model.clear();
-        setState(() {});
-        model = await DataFetcher().fetchShow(text);
-        setText(text);
-        setState(() {});
-      });
+      Future.delayed(
+        const Duration(milliseconds: 750),
+        () async {
+          model.clear();
+          setState(() {});
+          model = await DataFetcher().fetchShow(text);
+          setText(text);
+          setState(() {});
+        },
+      );
     }
   }
 
@@ -104,8 +117,9 @@ class _MainPageState extends State<MainPage> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: TextField(
+        controller: controller,
         onChanged: onChange,
-        onSubmitted: onSubmitted,
+        //onSubmitted: onSubmitted,
         keyboardType: TextInputType.name,
         style: Theme.of(context).textTheme.headline6,
         decoration: const InputDecoration(

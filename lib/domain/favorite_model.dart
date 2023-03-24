@@ -1,5 +1,5 @@
 import 'dart:core';
-import 'dart:math';
+//import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:firebase_core/firebase_core.dart';
 // import 'package:flutter/material.dart';
@@ -20,7 +20,7 @@ import 'package:flutter_application_1/domain/hive_model.dart';
 //     required this.image,
 //   });
 
-//   factory FavoriteModel.fromFirestore(DocumentSnapshot doc) {
+//   factory FavoriteModel. fromFirestore(DocumentSnapshot doc) {
 //     dynamic data = doc.data();
 //     return FavoriteModel(
 //       id: data['id'],
@@ -85,6 +85,61 @@ class FirecloudeEssense {
     return flag;
   }
 
+  Future<bool> compareData() async {
+    bool compare = true;
+    Box hiveBox = Hive.box<ShowHive>('showBox');
+    List hiveData = hiveBox.values.toList();
+    int counter = 0;
+
+    QuerySnapshot snapshot =
+        await FirebaseFirestore.instance.collection('shows').get();
+    List<ShowHive> data = snapshot.docs.map((doc) {
+      return ShowHive.fromFirestore(doc);
+    }).toList();
+
+    if (hiveData.length != data.length) {
+      compare = false;
+    } else {
+      for (int i = 0; i < hiveData.length; i++) {
+        final hiveBoxInfo = box.getAt(i);
+
+        for (int j = 0; j < data.length; j++) {
+          if (hiveBoxInfo?.id == data[j].id) {
+            counter++;
+          }
+        }
+      }
+      if (counter != hiveData.length) {
+        compare = false;
+      }
+    }
+    return compare;
+  }
+
+  void compareDataFireHive() async {
+    var compare = await compareData();
+    if (compare == false) {
+      hiveBoxClear();
+      final data = await getDataFromFirestore();
+      hiveBoxFilling(data);
+    }
+  }
+
+  void deleteFirestoreShow(int id) async {
+    QuerySnapshot snapshot =
+        await FirebaseFirestore.instance.collection('shows').get();
+    List<ShowHive> data = snapshot.docs.map((doc) {
+      return ShowHive.fromFirestore(doc);
+    }).toList();
+
+    for (int i = 0; i < data.length; i++) {
+      if (id == data[i].id) {
+        var documentId = snapshot.docs[i].id;
+        FirebaseFirestore.instance.collection('shows').doc(documentId).delete();
+      }
+    }
+  }
+
   // int checkingForFavorite (int id){
   //       int counter = 0;
 
@@ -94,7 +149,7 @@ class FirecloudeEssense {
   //     var showName = showinfo?.name;
   //     var showLanguage = showinfo?.language;
 
-  //     if (name == showName && language == showLanguage && image == linkImage) {
+  //     if (name == showName && language == showLanguage && image = = linkImage) {
   //       counter++;
   //     }
   //   }

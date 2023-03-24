@@ -13,15 +13,18 @@ class HiveWidgetModel {
     await box.add(showHive);
   }
 
-  int checkingForFavorite(String name, String language, String image) {
+  int checkingForFavorite(
+      int id /*String name, String language, String image*/) {
     int counter = 0;
     for (int index = 0; index < box.length; index++) {
       final showinfo = box.getAt(index);
-      var linkImage = showinfo?.image ?? '';
-      var showName = showinfo?.name;
-      var showLanguage = showinfo?.language;
+      var showId = showinfo?.id;
+      // var linkImage = showinfo?.image ?? '';
+      // var showName = showinfo?.name;
+      // var showLanguage = showinfo?.language;
 
-      if (name == showName && language == showLanguage && image == linkImage) {
+      //if (name == showName && language == showLanguage && image == linkImage)
+      if (id == showId) {
         counter++;
       }
     }
@@ -29,14 +32,16 @@ class HiveWidgetModel {
     return counter;
   }
 
-  void deleteShow(String name, String language, String image) {
+  void deleteShow(int id /*String name, String language, String image*/) {
     for (int index = 0; index < box.length; index++) {
       final showinfo = box.getAt(index);
-      var linkImage = showinfo?.image ?? '';
-      var showName = showinfo?.name;
-      var showLanguage = showinfo?.language;
+      var showId = showinfo?.id;
+      // var linkImage = showinfo?.image ?? '';
+      // var showName = showinfo?.name;
+      // var showLanguage = showinfo?.language;
 
-      if (name == showName && language == showLanguage && image == linkImage) {
+      //if (name == showName && language == showLanguage && image == linkImage)
+      if (id == showId) {
         box.deleteAt(index);
       }
     }

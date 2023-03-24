@@ -20,6 +20,7 @@ class ShowLisetWidget extends StatefulWidget {
 
   @override
   State<ShowLisetWidget> createState() =>
+      // ignore: no_logic_in_create_state
       _ShowLisetWidgetState(id, imageURL, title, text);
 }
 
@@ -35,15 +36,15 @@ class _ShowLisetWidgetState extends State<ShowLisetWidget> {
     this.text,
   );
 
-  late IconData buttonFilling;
+  late IconData buttonFilling = Icons.favorite_border;
   List<ShowHive>? data;
   final fireModel = FirecloudeEssense();
   final hiveModel = HiveWidgetModel();
-  //final model = MainPage();
+  //var buttonFilling = Icons.favorite_border;
+  //final mainPage = const MainPage();
 
   @override
   void initState() {
-    buttonFilling = Icons.favorite_border;
     getData();
     super.initState();
   }
@@ -53,24 +54,29 @@ class _ShowLisetWidgetState extends State<ShowLisetWidget> {
     // print("object");
   }
 
-  int checkingForFavorite(int id) {
-    int counter = 0;
-    int max = data?.length ?? 0;
-    for (int index = 0; index < max; index++) {
-      var showId = data?[index].id ?? 0;
-      if (id == showId) {
-        counter++;
-      }
-    }
-    return counter;
-  }
+  // int checkingForFavorite(int id) {
+  //   int counter = 0;
+  //   int max = data?.length ?? 0;
+  //   for (int index = 0; index < max; index++) {
+  //     var showId = data?[index].id ?? 0;
+  //     if (id == showId) {
+  //       counter++;
+  //     }
+  //   }
+  //   return counter;
+  // }
 
   @override
   Widget build(BuildContext context) {
-    int comparasion = checkingForFavorite(id);
+    int comparasion = hiveModel.checkingForFavorite(id);
     if (comparasion != 0) {
       buttonFilling = Icons.favorite;
+      setState(() {});
     }
+    // else {
+    //   buttonFilling = Icons.favorite_border;
+    //   setState(() {});
+    // }
 
     return Card(
       child: Row(
@@ -112,9 +118,9 @@ class _ShowLisetWidgetState extends State<ShowLisetWidget> {
               child: IconButton(
                 onPressed: () {
                   if (comparasion == 0) {
-                    buttonFilling = Icons.favorite;
+                    //buttonFilling = Icons.favorite;
 
-                    hiveModel.saveShow(id, title, text, imageURL);
+                    //hiveModel.saveShow(id, title, text, imageURL);
 
                     FirebaseFirestore.instance.collection('shows').add({
                       'id': id,
@@ -122,12 +128,26 @@ class _ShowLisetWidgetState extends State<ShowLisetWidget> {
                       'text': text,
                       'imageURL': imageURL
                     });
+                    fireModel.compareDataFireHive();
+                    //comparasion = hiveModel.checkingForFavorite(id);
                     //model.saveShow(title, text, imageURL);
-                    setState(() {});
-                  } else {
+                    //comparasion++;
+                    setState(() {
+                      buttonFilling = Icons.favorite;
+                    });
+                  }
+                  if (comparasion != 0) {
+                    //hiveModel.deleteShow(id);
                     //model.deleteShow(title, text, imageURL);
+                    fireModel.deleteFirestoreShow(id);
+                    fireModel.compareDataFireHive();
                     buttonFilling = Icons.favorite_border;
-                    setState(() {});
+                    // comparasion = hiveModel.checkingForFavorite(id);
+                    // setState(() {});
+                    //comparasion--;
+                    setState(() {
+                      buttonFilling = Icons.favorite_border;
+                    });
                   }
 
                   // setState(() {
