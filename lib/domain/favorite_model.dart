@@ -40,7 +40,7 @@ import 'package:flutter_application_1/domain/hive_model.dart';
 // }
 
 class FirecloudeEssense {
-  final box = Hive.box<ShowHive>('showBox');
+  var box = Hive.box<ShowHive>('showBox');
 
   Future<List<ShowHive>> getDataFromFirestore() async {
     QuerySnapshot snapshot =
@@ -58,7 +58,11 @@ class FirecloudeEssense {
           name: data[i].name,
           language: data[i].language,
           image: data[i].image);
-      await box.put(i, showHive);
+      await box.add(showHive);
+
+      print("------------------------------------");
+      print(box.length);
+      print("------------------------------------");
     }
   }
 
@@ -66,24 +70,24 @@ class FirecloudeEssense {
     await box.clear();
   }
 
-  bool checkingForChange(List<ShowHive> data) {
-    bool flag = true;
-    int count = 0;
+  // bool checkingForChange(List<ShowHive> data) {
+  //   bool flag = true;
+  //   int count = 0;
 
-    if (data.length == box.length) {
-      int countLenght = data.length;
-      for (int i = 0; i < data.length; i++) {
-        final boxInfo = box.getAt(i);
-        if (data[i].id == boxInfo?.id) {
-          count++;
-        }
-      }
-      if (count == countLenght) {
-        flag = false;
-      }
-    }
-    return flag;
-  }
+  //   if (data.length == box.length) {
+  //     int countLenght = data.length;
+  //     for (int i = 0; i < data.length; i++) {
+  //       final boxInfo = box.getAt(i);
+  //       if (data[i].id == boxInfo?.id) {
+  //         count++;
+  //       }
+  //     }
+  //     if (count == countLenght) {
+  //       flag = false;
+  //     }
+  //   }
+  //   return flag;
+  // }
 
   Future<bool> compareData() async {
     bool compare = true;
@@ -120,9 +124,19 @@ class FirecloudeEssense {
     var compare = await compareData();
     if (compare == false) {
       hiveBoxClear();
-      final data = await getDataFromFirestore();
+      var data = await getDataFromFirestore();
       hiveBoxFilling(data);
+      //print("------------------------------------");
     }
+    // print("------------------------------------");
+    // print(box.length);
+    // print("------------------------------------");
+  }
+
+  void clearAndFilling() async {
+    hiveBoxClear();
+    final data = await getDataFromFirestore();
+    hiveBoxFilling(data);
   }
 
   void deleteFirestoreShow(int id) async {
@@ -138,6 +152,7 @@ class FirecloudeEssense {
         FirebaseFirestore.instance.collection('shows').doc(documentId).delete();
       }
     }
+    //compareDataFireHive();
   }
 
   // int checkingForFavorite (int id){

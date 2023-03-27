@@ -128,25 +128,32 @@ class _ShowLisetWidgetState extends State<ShowLisetWidget> {
                       'text': text,
                       'imageURL': imageURL
                     });
-                    fireModel.compareDataFireHive();
+
+                    //fireModel.hiveBoxFilling(data)
                     //comparasion = hiveModel.checkingForFavorite(id);
                     //model.saveShow(title, text, imageURL);
                     //comparasion++;
+                    buttonFilling = Icons.favorite;
+                    fireModel.compareDataFireHive();
                     setState(() {
-                      buttonFilling = Icons.favorite;
+                      comparasion = hiveModel.checkingForFavorite(id);
                     });
                   }
                   if (comparasion != 0) {
+                    print("");
                     //hiveModel.deleteShow(id);
                     //model.deleteShow(title, text, imageURL);
-                    fireModel.deleteFirestoreShow(id);
-                    fireModel.compareDataFireHive();
-                    buttonFilling = Icons.favorite_border;
+
+                    //buttonFilling = Icons.favorite_border;
                     // comparasion = hiveModel.checkingForFavorite(id);
                     // setState(() {});
                     //comparasion--;
+                    buttonFilling = Icons.favorite_border;
+                    fireModel.deleteFirestoreShow(id);
+                    fireModel.compareDataFireHive();
+                    //fireModel.clearAndFilling();
                     setState(() {
-                      buttonFilling = Icons.favorite_border;
+                      comparasion = hiveModel.checkingForFavorite(id);
                     });
                   }
 
