@@ -40,12 +40,19 @@ class _ShowLisetWidgetState extends State<ShowLisetWidget> {
   List<ShowHive>? data;
   final fireModel = FirecloudeEssense();
   final hiveModel = HiveWidgetModel();
+  int comparasion = 0;
   //var buttonFilling = Icons.favorite_border;
   //final mainPage = const MainPage();
 
   @override
   void initState() {
     getData();
+
+    comparasion = hiveModel.checkingForFavorite(id);
+    // if (comparasion != 0) {
+    //   buttonFilling = Icons.favorite;
+    //   setState(() {});
+    // }
     super.initState();
   }
 
@@ -68,11 +75,13 @@ class _ShowLisetWidgetState extends State<ShowLisetWidget> {
 
   @override
   Widget build(BuildContext context) {
-    int comparasion = hiveModel.checkingForFavorite(id);
+    //int comparasion = hiveModel.checkingForFavorite(id);
+    //setState(() {});
     if (comparasion != 0) {
       buttonFilling = Icons.favorite;
-      setState(() {});
+      //  setState(() {});
     }
+
     // else {
     //   buttonFilling = Icons.favorite_border;
     //   setState(() {});
@@ -116,45 +125,51 @@ class _ShowLisetWidgetState extends State<ShowLisetWidget> {
             height: 50,
             child: Center(
               child: IconButton(
+                style: IconButton.styleFrom(
+                    disabledForegroundColor: Constants.favoriteButtonColor),
+                icon: Icon(
+                  buttonFilling,
+                  color: Constants.favoriteButtonColor,
+                ),
                 onPressed: () {
                   if (comparasion == 0) {
                     //buttonFilling = Icons.favorite;
 
                     //hiveModel.saveShow(id, title, text, imageURL);
-
+                    print("");
                     FirebaseFirestore.instance.collection('shows').add({
                       'id': id,
                       'title': title,
                       'text': text,
                       'imageURL': imageURL
                     });
-
-                    //fireModel.hiveBoxFilling(data)
+                    fireModel.compareDataFireHive();
                     //comparasion = hiveModel.checkingForFavorite(id);
                     //model.saveShow(title, text, imageURL);
                     //comparasion++;
                     buttonFilling = Icons.favorite;
-                    fireModel.compareDataFireHive();
-                    setState(() {
-                      comparasion = hiveModel.checkingForFavorite(id);
-                    });
+                    comparasion++;
+                    setState(() {});
+                    print(comparasion);
                   }
-                  if (comparasion != 0) {
-                    print("");
+                  //if (comparasion != 0)
+                  else {
                     //hiveModel.deleteShow(id);
                     //model.deleteShow(title, text, imageURL);
+                    fireModel.deleteFirestoreShow(id);
+                    fireModel.compareDataFireHive();
 
-                    //buttonFilling = Icons.favorite_border;
+                    buttonFilling = Icons.favorite_border;
+                    comparasion = 0;
+                    setState(() {});
+                    print("object");
+
                     // comparasion = hiveModel.checkingForFavorite(id);
                     // setState(() {});
                     //comparasion--;
-                    buttonFilling = Icons.favorite_border;
-                    fireModel.deleteFirestoreShow(id);
-                    fireModel.compareDataFireHive();
-                    //fireModel.clearAndFilling();
-                    setState(() {
-                      comparasion = hiveModel.checkingForFavorite(id);
-                    });
+                    // setState(() {
+                    //   buttonFilling = Icons.favorite_border;
+                    // });
                   }
 
                   // setState(() {
@@ -170,13 +185,10 @@ class _ShowLisetWidgetState extends State<ShowLisetWidget> {
                   //     buttonFilling = Icons.favorite_border;
                   //   }
                   // });
+
+                  setState(() {});
+                  print("object");
                 },
-                style: IconButton.styleFrom(
-                    disabledForegroundColor: Constants.favoriteButtonColor),
-                icon: Icon(
-                  buttonFilling,
-                  color: Constants.favoriteButtonColor,
-                ),
               ),
             ),
           ),

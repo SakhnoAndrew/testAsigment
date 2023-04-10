@@ -99,7 +99,8 @@ class _MainPageState extends State<MainPage> {
 
     for (int i = 0; i < model.length - 1; i++) {
       String imageVariable = "";
-      if (model[i].image != null) imageVariable = model[i].image?["medium"];
+      //if (model[i].image != null) imageVariable = model[i].image?["medium"];
+      imageVariable = model[i].image ?? '';
 
       widgets.add(
         ShowLisetWidget(
