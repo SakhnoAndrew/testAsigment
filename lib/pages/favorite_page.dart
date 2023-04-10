@@ -1,5 +1,4 @@
 import 'dart:core';
-//import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -90,7 +89,6 @@ class _FavoritePageState extends State<FavoritePage> {
                         onPressed: () {
                           fireModel.deleteFirestoreShow(id);
                           fireModel.compareDataFireHive();
-                          //_box.deleteAt(index);
                           setState(() {
                             length = _box.length;
                           });

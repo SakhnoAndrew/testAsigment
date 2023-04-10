@@ -37,7 +37,6 @@ class Image {
 
 class DataFetcher {
   List<Show> show = [];
-  //List<Image> image = [];
 
   Future<List<Show>> fetchShow(String searchText) async {
     final response = await http
@@ -49,8 +48,6 @@ class DataFetcher {
       var imageInfo = showInfo.map((e) => e["image"] as Map<String, dynamic>?);
       var image =
           imageInfo.map((e) => Image(medium: e?["medium"] as String?)).toList();
-      //e["image"] as Map<String, dynamic>);
-      //if(image == null) image = '' ;
       var show = showInfo
           .map(
             (e) => Show(
@@ -58,10 +55,6 @@ class DataFetcher {
               name: e['name'] as String,
               language: e['language'] as String,
               image: '',
-              // image.map((e) => e['medium'] as String),
-              //image.map((e) => e['medium'] as String),
-              // Image.map(e) => Image(image: e['medium'])
-              // e['image'] => Image ( image: e['medium']),
             ),
           )
           .toList();

@@ -13,17 +13,11 @@ class HiveWidgetModel {
     await box.add(showHive);
   }
 
-  int checkingForFavorite(
-      int id /*String name, String language, String image*/) {
+  int checkingForFavorite(int id) {
     int counter = 0;
     for (int index = 0; index < box.length; index++) {
       final showinfo = box.getAt(index);
       var showId = showinfo?.id;
-      // var linkImage = showinfo?.image ?? '';
-      // var showName = showinfo?.name;
-      // var showLanguage = showinfo?.language;
-
-      //if (name == showName && language == showLanguage && image == linkImage)
       if (id == showId) {
         counter++;
       }
@@ -32,15 +26,10 @@ class HiveWidgetModel {
     return counter;
   }
 
-  void deleteShow(int id /*String name, String language, String image*/) {
+  void deleteShow(int id) {
     for (int index = 0; index < box.length; index++) {
       final showinfo = box.getAt(index);
       var showId = showinfo?.id;
-      // var linkImage = showinfo?.image ?? '';
-      // var showName = showinfo?.name;
-      // var showLanguage = showinfo?.language;
-
-      //if (name == showName && language == showLanguage && image == linkImage)
       if (id == showId) {
         box.deleteAt(index);
       }

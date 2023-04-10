@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-//import 'package:flutter_application_1/pages/main_pages.dart';
 import 'package:flutter_application_1/domain/favorite_model.dart';
 import 'package:flutter_application_1/constants.dart';
 import 'package:flutter_application_1/domain/hive_model.dart';
@@ -41,51 +40,23 @@ class _ShowLisetWidgetState extends State<ShowLisetWidget> {
   final fireModel = FirecloudeEssense();
   final hiveModel = HiveWidgetModel();
   int comparasion = 0;
-  //var buttonFilling = Icons.favorite_border;
-  //final mainPage = const MainPage();
 
   @override
   void initState() {
     getData();
-
     comparasion = hiveModel.checkingForFavorite(id);
-    // if (comparasion != 0) {
-    //   buttonFilling = Icons.favorite;
-    //   setState(() {});
-    // }
     super.initState();
   }
 
   void getData() async {
     data = await fireModel.getDataFromFirestore();
-    // print("object");
   }
-
-  // int checkingForFavorite(int id) {
-  //   int counter = 0;
-  //   int max = data?.length ?? 0;
-  //   for (int index = 0; index < max; index++) {
-  //     var showId = data?[index].id ?? 0;
-  //     if (id == showId) {
-  //       counter++;
-  //     }
-  //   }
-  //   return counter;
-  // }
 
   @override
   Widget build(BuildContext context) {
-    //int comparasion = hiveModel.checkingForFavorite(id);
-    //setState(() {});
     if (comparasion != 0) {
       buttonFilling = Icons.favorite;
-      //  setState(() {});
     }
-
-    // else {
-    //   buttonFilling = Icons.favorite_border;
-    //   setState(() {});
-    // }
 
     return Card(
       child: Row(
@@ -133,10 +104,6 @@ class _ShowLisetWidgetState extends State<ShowLisetWidget> {
                 ),
                 onPressed: () {
                   if (comparasion == 0) {
-                    //buttonFilling = Icons.favorite;
-
-                    //hiveModel.saveShow(id, title, text, imageURL);
-                    print("");
                     FirebaseFirestore.instance.collection('shows').add({
                       'id': id,
                       'title': title,
@@ -144,50 +111,18 @@ class _ShowLisetWidgetState extends State<ShowLisetWidget> {
                       'imageURL': imageURL
                     });
                     fireModel.compareDataFireHive();
-                    //comparasion = hiveModel.checkingForFavorite(id);
-                    //model.saveShow(title, text, imageURL);
-                    //comparasion++;
                     buttonFilling = Icons.favorite;
                     comparasion++;
                     setState(() {});
-                    print(comparasion);
-                  }
-                  //if (comparasion != 0)
-                  else {
-                    //hiveModel.deleteShow(id);
-                    //model.deleteShow(title, text, imageURL);
+                  } else {
                     fireModel.deleteFirestoreShow(id);
                     fireModel.compareDataFireHive();
 
                     buttonFilling = Icons.favorite_border;
                     comparasion = 0;
                     setState(() {});
-                    print("object");
-
-                    // comparasion = hiveModel.checkingForFavorite(id);
-                    // setState(() {});
-                    //comparasion--;
-                    // setState(() {
-                    //   buttonFilling = Icons.favorite_border;
-                    // });
                   }
-
-                  // setState(() {
-                  //   if (buttonFilling == Icons.favorite_border) {
-                  //     buttonFilling = Icons.favorite;
-                  // FirebaseFirestore.instance.collection('shows').add({
-                  //   'id': id,
-                  //   'title': title,
-                  //   'text': text,
-                  //   'imageURL': imageURL
-                  // });
-                  //   } else {
-                  //     buttonFilling = Icons.favorite_border;
-                  //   }
-                  // });
-
                   setState(() {});
-                  print("object");
                 },
               ),
             ),

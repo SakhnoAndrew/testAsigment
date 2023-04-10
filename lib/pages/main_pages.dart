@@ -20,16 +20,12 @@ class _MainPageState extends State<MainPage> {
   static const textKey = 'text';
   final fireModel = FirecloudeEssense();
   TextEditingController? controller = TextEditingController(text: '');
-  //bool compare = false;
-  //List<FavoriteModel>? data;
 
   @override
   void initState() {
-    //   getData();
     startShowsBilding();
     fireModel.compareDataFireHive();
-    // print(compare);
-    // print("object");
+
     super.initState();
   }
 
