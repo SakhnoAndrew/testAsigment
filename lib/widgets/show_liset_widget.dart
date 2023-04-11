@@ -10,8 +10,10 @@ class ShowLisetWidget extends StatefulWidget {
   final String imageURL;
   final String title;
   final String text;
+  // final time;
   const ShowLisetWidget(
       {super.key,
+      //  required this.time,
       required this.id,
       required this.imageURL,
       required this.title,
@@ -28,11 +30,13 @@ class _ShowLisetWidgetState extends State<ShowLisetWidget> {
   final String imageURL;
   final String title;
   final String text;
+//  final time;
   _ShowLisetWidgetState(
     this.id,
     this.imageURL,
     this.title,
     this.text,
+    // this.time,
   );
 
   late IconData buttonFilling = Icons.favorite_border;
@@ -45,6 +49,8 @@ class _ShowLisetWidgetState extends State<ShowLisetWidget> {
   void initState() {
     getData();
     comparasion = hiveModel.checkingForFavorite(id);
+    //fireModel.compareDataFireHive();
+
     super.initState();
   }
 
@@ -104,20 +110,24 @@ class _ShowLisetWidgetState extends State<ShowLisetWidget> {
                 ),
                 onPressed: () {
                   if (comparasion == 0) {
+                    final timeNow = DateTime.now();
+                    setState(() {});
                     FirebaseFirestore.instance.collection('shows').add({
                       'id': id,
                       'title': title,
                       'text': text,
-                      'imageURL': imageURL
+                      'imageURL': imageURL,
+                      'time': timeNow,
                     });
-                    fireModel.compareDataFireHive();
+                    hiveModel.saveShow(id, title, text, imageURL, timeNow);
+                    //fireModel.compareDataFireHive();
                     buttonFilling = Icons.favorite;
                     comparasion++;
                     setState(() {});
                   } else {
                     fireModel.deleteFirestoreShow(id);
-                    fireModel.compareDataFireHive();
-
+                    // fireModel.compareDataFireHive();
+                    hiveModel.deleteShow(id);
                     buttonFilling = Icons.favorite_border;
                     comparasion = 0;
                     setState(() {});

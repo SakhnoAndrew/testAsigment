@@ -4,6 +4,7 @@ import 'package:flutter_application_1/pages/main_pages.dart';
 import 'package:flutter_application_1/pages/favorite_page.dart';
 import 'package:flutter_application_1/domain/hive_model.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'domain/favorite_model.dart';
 import 'firebase_options.dart';
 
 import 'package:hive_flutter/hive_flutter.dart';
@@ -13,11 +14,13 @@ void main() async {
   Hive.initFlutter();
   await Hive.initFlutter();
   Hive.registerAdapter(ShowHiveAdapter());
-  await Hive.openBox<ShowHive>('showBox');
+  await Hive.openBox<ShowHive>('showBoxHive');
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  final fireModel = FirecloudeEssense();
+  fireModel.timeCompare();
 
   runApp(
     MaterialApp(

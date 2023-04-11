@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flutter_application_1/domain/api_client.dart';
+
 import 'package:flutter_application_1/pages/navigation_drawer.dart';
 import 'package:flutter_application_1/widgets/show_liset_widget.dart';
 import 'package:flutter_application_1/domain/favorite_model.dart';
 import 'package:flutter_application_1/constants.dart';
+
+import '../domain/hive_model.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -19,36 +22,17 @@ class _MainPageState extends State<MainPage> {
   List<Show> model = [];
   static const textKey = 'text';
   final fireModel = FirecloudeEssense();
+  final hiveModel = HiveWidgetModel();
   TextEditingController? controller = TextEditingController(text: '');
 
   @override
   void initState() {
     startShowsBilding();
-    fireModel.compareDataFireHive();
+    // hiveModel.hiveClear();
+    //fireModel.compareDataFireHive();
 
     super.initState();
   }
-
-  // void compareDataFireHive() async {
-  //   var compare = await fireModel.compareData();
-  //   if (compare == false) {
-  //     fireModel.hiveBoxClear();
-  //     final data = await fireModel.getDataFromFirestore();
-  //     fireModel.hiveBoxFilling(data);
-  //   }
-  // }
-
-  // int checkingForFavorite(int id) {
-  //   int counter = 0;
-
-  //   for (int index = 0; index < data!.length; index++) {
-  //     var showId = data?[index].id ?? 0;
-  //     if (id == showId) {
-  //       counter++;
-  //     }
-  //   }
-  //   return counter;
-  // }
 
   void startShowsBilding() async {
     var text = await getText();
@@ -95,7 +79,6 @@ class _MainPageState extends State<MainPage> {
 
     for (int i = 0; i < model.length - 1; i++) {
       String imageVariable = "";
-      //if (model[i].image != null) imageVariable = model[i].image?["medium"];
       imageVariable = model[i].image ?? '';
 
       widgets.add(
@@ -104,6 +87,7 @@ class _MainPageState extends State<MainPage> {
           title: model[i].name,
           text: model[i].language,
           imageURL: imageVariable,
+          //time: model[i].timeNow,
         ),
       );
     }

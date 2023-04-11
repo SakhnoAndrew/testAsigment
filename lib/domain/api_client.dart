@@ -14,12 +14,14 @@ class Show {
   final String name;
   final String language;
   String? image;
+  //final dynamic timeNow;
 
   Show({
     required this.id,
     required this.name,
     required this.language,
     required this.image,
+    //required this.timeNow,
   });
 }
 

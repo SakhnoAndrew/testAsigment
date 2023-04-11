@@ -17,19 +17,21 @@ class FavoritePage extends StatefulWidget {
 }
 
 class _FavoritePageState extends State<FavoritePage> {
-  final _box = Hive.box<ShowHive>('showBox');
+  final _box = Hive.box<ShowHive>('showBoxHive');
   int? length;
   dynamic model;
   final fireModel = FirecloudeEssense();
+  final hiveModel = HiveWidgetModel();
 
   @override
   void initState() {
     super.initState();
-    fireModel.compareDataFireHive();
+    //fireModel.timeCompare();
+    // fireModel.compareDataFireHive();
     length = _box.length;
   }
 
-  final HiveWidgetModel hiveWidgetModel = HiveWidgetModel();
+  // final HiveWidgetModel hiveWidgetModel = HiveWidgetModel();
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +90,9 @@ class _FavoritePageState extends State<FavoritePage> {
                       child: IconButton(
                         onPressed: () {
                           fireModel.deleteFirestoreShow(id);
-                          fireModel.compareDataFireHive();
+                          // fireModel.compareDataFireHive();
+                          hiveModel.deleteShow(id);
+
                           setState(() {
                             length = _box.length;
                           });
