@@ -28,9 +28,6 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     startShowsBilding();
-    // hiveModel.hiveClear();
-    //fireModel.compareDataFireHive();
-
     super.initState();
   }
 
@@ -87,7 +84,6 @@ class _MainPageState extends State<MainPage> {
           title: model[i].name,
           text: model[i].language,
           imageURL: imageVariable,
-          //time: model[i].timeNow,
         ),
       );
     }
@@ -100,7 +96,6 @@ class _MainPageState extends State<MainPage> {
       child: TextField(
         controller: controller,
         onChanged: onChange,
-        //onSubmitted: onSubmitted,
         keyboardType: TextInputType.name,
         style: Theme.of(context).textTheme.headline6,
         decoration: const InputDecoration(

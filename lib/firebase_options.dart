@@ -66,7 +66,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '126427350071',
     projectId: 'testassigment',
     storageBucket: 'testassigment.appspot.com',
-    iosClientId: '126427350071-jg2oo8hug6o1evsca51livm29da9ocif.apps.googleusercontent.com',
+    iosClientId:
+        '126427350071-jg2oo8hug6o1evsca51livm29da9ocif.apps.googleusercontent.com',
     iosBundleId: 'com.example.flutterApplication1',
   );
 
@@ -76,7 +77,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '126427350071',
     projectId: 'testassigment',
     storageBucket: 'testassigment.appspot.com',
-    iosClientId: '126427350071-jg2oo8hug6o1evsca51livm29da9ocif.apps.googleusercontent.com',
+    iosClientId:
+        '126427350071-jg2oo8hug6o1evsca51livm29da9ocif.apps.googleusercontent.com',
     iosBundleId: 'com.example.flutterApplication1',
   );
 }

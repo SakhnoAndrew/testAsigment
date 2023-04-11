@@ -26,12 +26,8 @@ class _FavoritePageState extends State<FavoritePage> {
   @override
   void initState() {
     super.initState();
-    //fireModel.timeCompare();
-    // fireModel.compareDataFireHive();
     length = _box.length;
   }
-
-  // final HiveWidgetModel hiveWidgetModel = HiveWidgetModel();
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +86,6 @@ class _FavoritePageState extends State<FavoritePage> {
                       child: IconButton(
                         onPressed: () {
                           fireModel.deleteFirestoreShow(id);
-                          // fireModel.compareDataFireHive();
                           hiveModel.deleteShow(id);
 
                           setState(() {

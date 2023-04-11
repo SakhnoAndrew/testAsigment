@@ -59,16 +59,6 @@ class FirecloudeEssense {
     Box hiveBox = Hive.box<ShowHive>('showBoxHive');
     List hiveData = hiveBox.values.toList();
     int counter = 0;
-    //QuerySnapshot? snapshot  ;
-    // List<ShowHive>? data;
-
-    // QuerySnapshot snapshot =
-    //     await FirebaseFirestore.instance.collection('shows').get();
-
-    // Future.delayed(
-    //   const Duration(milliseconds: 300),
-    //   () {},
-    // );
 
     QuerySnapshot snapshot =
         await FirebaseFirestore.instance.collection('shows').get();
@@ -95,15 +85,6 @@ class FirecloudeEssense {
     }
     return compare;
   }
-
-  // void compareDataFireHive() async {
-  //   bool compare = await compareData();
-  //   if (compare == false) {
-  //     hiveBoxClear();
-  //     final data = await getDataFromFirestore();
-  //     hiveBoxFilling(data);
-  //   }
-  // }
 
   void deleteFirestoreShow(int id) async {
     QuerySnapshot snapshot =

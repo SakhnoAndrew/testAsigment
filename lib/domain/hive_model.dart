@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-//import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -97,19 +96,3 @@ class ShowHiveAdapter extends TypeAdapter<ShowHive> {
     writer.write(obj.timeNow);
   }
 }
-
-// class ShowProvider extends InheritedNotifier {
-//   final HiveWidgetModel model;
-//   const ShowProvider({Key? key, required Widget child, required this.model})
-//       : super(key: key, child: child);
-
-//   static ShowProvider? watch(BuildContext context) {
-//     return context.dependOnInheritedWidgetOfExactType<ShowProvider>();
-//   }
-
-//   static ShowProvider? read(BuildContext context) {
-//     final widget =
-//         context.getElementForInheritedWidgetOfExactType<ShowProvider>()?.widget;
-//     return widget is ShowProvider ? widget : null;
-//   }
-// }
