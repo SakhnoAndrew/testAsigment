@@ -44,13 +44,8 @@ class _ShowLisetWidgetState extends State<ShowLisetWidget> {
 
   @override
   void initState() {
-    getData();
     comparasion = hiveModel.checkingForFavorite(id);
     super.initState();
-  }
-
-  void getData() async {
-    data = await fireModel.getDataFromFirestore();
   }
 
   @override

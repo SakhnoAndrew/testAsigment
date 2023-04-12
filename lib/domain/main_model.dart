@@ -1,4 +1,3 @@
-//import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -12,8 +11,7 @@ class MainScreenModel {
   void mainScreenBoxFilling(List<Show> data) async {
     for (int i = 0; i < data.length; i++) {
       DateTime hiveTime = DateTime.utc(1989, 11, 9);
-      // Timestamp timeFireTemp = data[i].timeNow;
-      // DateTime timeFireDate = timeFireTemp.toDate();
+
       String imageVariable = "";
       imageVariable = data[i].image ?? '';
 
