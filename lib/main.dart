@@ -14,7 +14,10 @@ void main() async {
   Hive.initFlutter();
   await Hive.initFlutter();
   Hive.registerAdapter(ShowHiveAdapter());
+  Hive.registerAdapter(ShowNameAdapter());
   await Hive.openBox<ShowHive>('showBoxHive');
+  await Hive.openBox<ShowHive>('mainScreenBox');
+  await Hive.openBox<ShowName>('nameBox');
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

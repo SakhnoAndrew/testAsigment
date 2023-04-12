@@ -96,3 +96,30 @@ class ShowHiveAdapter extends TypeAdapter<ShowHive> {
     writer.write(obj.timeNow);
   }
 }
+
+class ShowName {
+  final String name;
+
+  ShowName({
+    required this.name,
+  });
+}
+
+class ShowNameAdapter extends TypeAdapter<ShowName> {
+  @override
+  final typeId = 1;
+
+  @override
+  ShowName read(BinaryReader reader) {
+    final name = reader.readString();
+
+    return ShowName(
+      name: name,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, ShowName obj) {
+    writer.writeString(obj.name);
+  }
+}
