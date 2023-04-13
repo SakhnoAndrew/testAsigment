@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -9,36 +10,40 @@ import '../domain/hive_model.dart';
 
 //----------------------- unfinished widget ------------------------------//
 
-class ShowList extends StatefulWidget {
-  const ShowList({super.key});
+class MainShowList extends StatefulWidget {
+  const MainShowList({super.key});
 
   @override
-  State<ShowList> createState() => _ShowListState();
+  State<MainShowList> createState() => _MainShowListState();
 }
 
-class _ShowListState extends State<ShowList> {
-  //final box = Hive.box<ShowHive>('mainScreenBox');
-  final box = Hive.box<ShowHive>('showBoxHive');
+class _MainShowListState extends State<MainShowList> {
+  final box = Hive.box<ShowHive>('mainScreenBox');
+  //final box = Hive.box<ShowHive>('showBoxHive');
   ValueListenable<Box<ShowHive>> _valueListenable =
       Hive.box<ShowHive>('showBoxHive').listenable();
-  int? length;
+  //int? length;
   final fireModel = FirecloudeEssense();
   final hiveModel = HiveWidgetModel();
+  int comparasion = 0;
+  late IconData buttonFilling = Icons.favorite_border;
 
   @override
   void initState() {
     super.initState();
     _valueListenable = box.listenable();
-    length = box.length;
+    //length = box.length;
   }
 
   @override
   Widget build(BuildContext context) {
     // ValueListenableBuilder in future
     return ValueListenableBuilder(
-        valueListenable: _valueListenable,
-        builder: (context, Box<ShowHive> box, _) {
-          return ListView.builder(
+      valueListenable: _valueListenable,
+      builder: (context, Box<ShowHive> box, _) {
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(0, 80, 0, 0),
+          child: ListView.builder(
             itemCount: box.length,
             itemBuilder: (BuildContext context, int index) {
               final showinfo = box.getAt(index);
@@ -46,7 +51,11 @@ class _ShowListState extends State<ShowList> {
               var linkImage = showinfo?.image ?? '';
               var showName = showinfo?.name;
               var showLanguage = showinfo?.language;
-              //box.
+              comparasion = hiveModel.checkingForFavorite(id);
+              if (comparasion != 0) {
+                buttonFilling = Icons.favorite;
+              }
+
               return Card(
                 child: Row(
                   children: [
@@ -86,18 +95,38 @@ class _ShowListState extends State<ShowList> {
                       child: Center(
                         child: IconButton(
                           onPressed: () {
-                            fireModel.deleteFirestoreShow(id);
-                            hiveModel.deleteShow(id);
-
-                            setState(() {
-                              length = box.length;
-                            });
+                            if (comparasion == 0) {
+                              final timeNow = DateTime.now();
+                              setState(() {});
+                              FirebaseFirestore.instance
+                                  .collection('shows')
+                                  .add({
+                                'id': id,
+                                'title': showName,
+                                'text': showLanguage,
+                                'imageURL': linkImage,
+                                'time': timeNow,
+                              });
+                              hiveModel.saveShow(id, showName!, showLanguage!,
+                                  linkImage, timeNow);
+                              buttonFilling = Icons.favorite;
+                              comparasion++;
+                              setState(() {});
+                            } else {
+                              fireModel.deleteFirestoreShow(id);
+                              hiveModel.deleteShow(id);
+                              buttonFilling = Icons.favorite_border;
+                              comparasion = 0;
+                              setState(() {});
+                            }
+                            setState(() {});
                           },
                           style: IconButton.styleFrom(
                               disabledForegroundColor:
                                   Constants.favoriteButtonColor),
-                          icon: const Icon(
-                            Icons.favorite,
+                          icon: Icon(
+                            //Icons.favorite,
+                            buttonFilling,
                             color: Constants.favoriteButtonColor,
                           ),
                         ),
@@ -106,8 +135,11 @@ class _ShowListState extends State<ShowList> {
                   ],
                 ),
               );
+              // );
             },
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 }
