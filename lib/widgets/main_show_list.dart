@@ -1,46 +1,45 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
 
 import '../constants.dart';
 import '../domain/favorite_model.dart';
 import '../domain/hive_model.dart';
 
-//----------------------- unfinished widget ------------------------------//
-
-class MainShowList extends StatefulWidget {
-  const MainShowList({super.key});
+class MainShowListWidget extends StatefulWidget {
+  const MainShowListWidget({super.key});
 
   @override
-  State<MainShowList> createState() => _MainShowListState();
+  State<MainShowListWidget> createState() => _MainShowListWidgetState();
 }
 
-class _MainShowListState extends State<MainShowList> {
+class _MainShowListWidgetState extends State<MainShowListWidget> {
   final box = Hive.box<ShowHive>('mainScreenBox');
-  //final box = Hive.box<ShowHive>('showBoxHive');
   ValueListenable<Box<ShowHive>> _valueListenable =
       Hive.box<ShowHive>('showBoxHive').listenable();
-  //int? length;
   final fireModel = FirecloudeEssense();
   final hiveModel = HiveWidgetModel();
-  int comparasion = 0;
-  late IconData buttonFilling = Icons.favorite_border;
+  List iconsMass = [];
 
   @override
   void initState() {
     super.initState();
     _valueListenable = box.listenable();
-    //length = box.length;
   }
 
   @override
   Widget build(BuildContext context) {
-    // ValueListenableBuilder in future
     return ValueListenableBuilder(
       valueListenable: _valueListenable,
-      builder: (context, Box<ShowHive> box, _) {
+      builder: (context, Box<ShowHive> boxs, _) {
+        iconsMass.clear();
+        for (int i = 0; i < box.length; i++) {
+          final showinfo = box.getAt(i);
+          int comparasion = hiveModel.checkingForFavorite(showinfo!.id);
+          if (comparasion != 0) iconsMass.add(Icons.favorite);
+          if (comparasion == 0) iconsMass.add(Icons.favorite_border);
+        }
         return Padding(
           padding: const EdgeInsets.fromLTRB(0, 80, 0, 0),
           child: ListView.builder(
@@ -51,10 +50,6 @@ class _MainShowListState extends State<MainShowList> {
               var linkImage = showinfo?.image ?? '';
               var showName = showinfo?.name;
               var showLanguage = showinfo?.language;
-              comparasion = hiveModel.checkingForFavorite(id);
-              if (comparasion != 0) {
-                buttonFilling = Icons.favorite;
-              }
 
               return Card(
                 child: Row(
@@ -95,7 +90,7 @@ class _MainShowListState extends State<MainShowList> {
                       child: Center(
                         child: IconButton(
                           onPressed: () {
-                            if (comparasion == 0) {
+                            if (iconsMass[index] == Icons.favorite_border) {
                               final timeNow = DateTime.now();
                               setState(() {});
                               FirebaseFirestore.instance
@@ -109,14 +104,12 @@ class _MainShowListState extends State<MainShowList> {
                               });
                               hiveModel.saveShow(id, showName!, showLanguage!,
                                   linkImage, timeNow);
-                              buttonFilling = Icons.favorite;
-                              comparasion++;
+                              iconsMass[index] = Icons.favorite;
                               setState(() {});
                             } else {
                               fireModel.deleteFirestoreShow(id);
                               hiveModel.deleteShow(id);
-                              buttonFilling = Icons.favorite_border;
-                              comparasion = 0;
+                              iconsMass[index] = Icons.favorite_border;
                               setState(() {});
                             }
                             setState(() {});
@@ -125,8 +118,7 @@ class _MainShowListState extends State<MainShowList> {
                               disabledForegroundColor:
                                   Constants.favoriteButtonColor),
                           icon: Icon(
-                            //Icons.favorite,
-                            buttonFilling,
+                            iconsMass[index],
                             color: Constants.favoriteButtonColor,
                           ),
                         ),
@@ -135,7 +127,6 @@ class _MainShowListState extends State<MainShowList> {
                   ],
                 ),
               );
-              // );
             },
           ),
         );

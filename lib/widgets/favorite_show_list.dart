@@ -1,23 +1,19 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
 
 import '../constants.dart';
 import '../domain/favorite_model.dart';
 import '../domain/hive_model.dart';
 
-//----------------------- unfinished widget ------------------------------//
-
-class ShowList extends StatefulWidget {
-  const ShowList({super.key});
+class FavoriteShowListWidget extends StatefulWidget {
+  const FavoriteShowListWidget({super.key});
 
   @override
-  State<ShowList> createState() => _ShowListState();
+  State<FavoriteShowListWidget> createState() => _FavoriteShowListWidgetState();
 }
 
-class _ShowListState extends State<ShowList> {
-  //final box = Hive.box<ShowHive>('mainScreenBox');
+class _FavoriteShowListWidgetState extends State<FavoriteShowListWidget> {
   final box = Hive.box<ShowHive>('showBoxHive');
   ValueListenable<Box<ShowHive>> _valueListenable =
       Hive.box<ShowHive>('showBoxHive').listenable();
@@ -34,7 +30,6 @@ class _ShowListState extends State<ShowList> {
 
   @override
   Widget build(BuildContext context) {
-    // ValueListenableBuilder in future
     return ValueListenableBuilder(
         valueListenable: _valueListenable,
         builder: (context, Box<ShowHive> box, _) {
