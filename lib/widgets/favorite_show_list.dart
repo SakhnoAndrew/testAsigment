@@ -14,39 +14,20 @@ class FavoriteShowListWidget extends StatefulWidget {
 }
 
 class _FavoriteShowListWidgetState extends State<FavoriteShowListWidget> {
-  final box = Hive.box<ShowHive>
-      //('showBoxHive');
-      ('favoriteScreenBox');
-
-  //('filterBox');
+  final box = Hive.box<ShowHive>('favoriteScreenBox');
   final ValueListenable<Box<ShowHive>> _valueListenable =
       Hive.box<ShowHive>('favoriteScreenBox').listenable();
-  //int? length;
-  final favoriteBox = Hive.box<ShowHive>('showBoxHive');
+  final favoriteBox = Hive.box<ShowHive>('favoriteLocalBox');
   final fireModel = FirecloudeEssense();
   final hiveModel = HiveWidgetModel();
 
   @override
   void initState() {
     super.initState();
-    // _valueListenable = box.listenable();
-    //length = box.length;
-    // Future.delayed(const Duration(milliseconds: 100), () async {});
-    //favoriteHiveClear();
     startShowsBilding();
   }
 
-  // void favoriteHiveClear() async {
-  //   //int lenght = favoriteResultBox.length;
-  //   await box.clear();
-  // }
-
   void startShowsBilding() async {
-    //favoriteResultBox.clear();
-    //favoriteHiveClear();
-    //fireModel.
-    //favoriteFilter.favoriteFilter(text);
-    //favoriteHiveClear();
     await box.clear();
     setState(() {});
     Future.delayed(const Duration(milliseconds: 200), () async {
@@ -60,7 +41,6 @@ class _FavoriteShowListWidgetState extends State<FavoriteShowListWidget> {
             timeNow: filling.timeNow);
         box.put(i, showHive);
       }
-      setState(() {});
     });
 
     setState(() {});
@@ -71,25 +51,23 @@ class _FavoriteShowListWidgetState extends State<FavoriteShowListWidget> {
     return ValueListenableBuilder(
         valueListenable: _valueListenable,
         builder: (context, Box<ShowHive> boxs, _) {
-          //length = box.length;
           return Padding(
             padding: const EdgeInsets.fromLTRB(0, 80, 0, 0),
             child: ListView.builder(
               itemCount: box.length,
               itemBuilder: (BuildContext context, int index) {
-                //Future.delayed(const Duration(milliseconds: 100), () {});
-                dynamic showinfo;
-                dynamic id = 0;
-                dynamic linkImage = '';
-                dynamic showName = '';
-                dynamic showLanguage = '';
+                dynamic showInfo;
+                int showId = 0;
+                String showLinkImage = '';
+                String showName = '';
+                String showLanguage = '';
 
                 if (index < box.length) {
-                  showinfo = box.getAt(index);
-                  id = showinfo?.id as int;
-                  linkImage = showinfo?.image ?? '';
-                  showName = showinfo?.name;
-                  showLanguage = showinfo?.language;
+                  showInfo = box.getAt(index);
+                  showId = showInfo?.id as int;
+                  showLinkImage = showInfo?.image ?? '';
+                  showName = showInfo?.name;
+                  showLanguage = showInfo?.language;
                 }
                 return Card(
                   child: Row(
@@ -97,7 +75,7 @@ class _FavoriteShowListWidgetState extends State<FavoriteShowListWidget> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                         child: CircleAvatar(
-                          backgroundImage: NetworkImage(linkImage),
+                          backgroundImage: NetworkImage(showLinkImage),
                           radius: 30,
                         ),
                       ),
@@ -108,7 +86,7 @@ class _FavoriteShowListWidgetState extends State<FavoriteShowListWidget> {
                             child: Padding(
                               padding: const EdgeInsets.fromLTRB(0, 10, 10, 10),
                               child: Text(
-                                ('$showName'),
+                                (showName),
                                 textDirection: TextDirection.ltr,
                                 style: const TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
@@ -131,13 +109,10 @@ class _FavoriteShowListWidgetState extends State<FavoriteShowListWidget> {
                         child: Center(
                           child: IconButton(
                             onPressed: () {
-                              fireModel.deleteFirestoreShow(id);
-                              hiveModel.deleteShow(id);
+                              fireModel.deleteFirestoreShow(showId);
+                              hiveModel.deleteShow(showId);
                               startShowsBilding();
-
-                              setState(() {
-                                //length = box.length;
-                              });
+                              setState(() {});
                             },
                             style: IconButton.styleFrom(
                                 disabledForegroundColor:

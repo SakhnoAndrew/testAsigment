@@ -15,7 +15,7 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(ShowHiveAdapter());
   Hive.registerAdapter(ShowNameAdapter());
-  await Hive.openBox<ShowHive>('showBoxHive');
+  await Hive.openBox<ShowHive>('favoriteLocalBox');
   await Hive.openBox<ShowHive>('mainScreenBox');
   await Hive.openBox<ShowHive>('favoriteScreenBox');
   await Hive.openBox<ShowHive>('filterBox');

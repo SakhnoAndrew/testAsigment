@@ -5,7 +5,7 @@ import 'package:flutter_application_1/domain/hive_model.dart';
 import 'package:flutter_application_1/domain/api_client.dart';
 
 class MainScreenModel {
-  final box = Hive.box<ShowHive>('mainScreenBox');
+  final mainScreenBox = Hive.box<ShowHive>('mainScreenBox');
   final nameBox = Hive.box<ShowName>('nameBox');
 
   void mainScreenBoxFilling(List<Show> data) async {
@@ -21,12 +21,12 @@ class MainScreenModel {
           language: data[i].language,
           image: imageVariable,
           timeNow: hiveTime);
-      await box.put(i, showHive);
+      await mainScreenBox.put(i, showHive);
     }
   }
 
   void mainScreenBoxClear() {
-    box.clear();
+    mainScreenBox.clear();
   }
 
   void setName(String text) async {

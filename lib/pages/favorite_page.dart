@@ -25,7 +25,6 @@ class FavoritePage extends StatelessWidget {
             child: FavoriteFilterWidget(),
           )
         ]),
-        //const FavoriteShowListWidget(),
       ),
     );
   }

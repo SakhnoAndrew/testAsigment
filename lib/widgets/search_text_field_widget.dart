@@ -44,7 +44,6 @@ class _SearchTextFieldWidgetState extends State<SearchTextFieldWidget> {
         () async {
           model.clear();
           mainModel.mainScreenBoxClear();
-          //favorite.favoriteFilter(text);
           setState(() {});
           model = await DataFetcher().fetchShow(text);
           setState(() {});

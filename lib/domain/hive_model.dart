@@ -3,12 +3,12 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class HiveWidgetModel {
-  final box = Hive.box<ShowHive>('showBoxHive');
+  final box = Hive.box<ShowHive>('favoriteLocalBox');
   final timeNow = DateTime.now;
 
   void saveShow(int id, String name, String language, String image,
       dynamic timeNow) async {
-    final box = await Hive.openBox<ShowHive>('showBoxHive');
+    final box = await Hive.openBox<ShowHive>('favoriteLocalBox');
     final showHive = ShowHive(
         id: id, name: name, language: language, image: image, timeNow: timeNow);
     await box.add(showHive);
@@ -36,10 +36,6 @@ class HiveWidgetModel {
       }
     }
   }
-
-  // void hiveClear() {
-  //   box.clear();
-  // }
 }
 
 class ShowHive {

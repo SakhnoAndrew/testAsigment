@@ -5,45 +5,45 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_application_1/domain/hive_model.dart';
 
 class FirecloudeEssense {
-  final box = Hive.box<ShowHive>('showBoxHive');
+  final favoriteLocalBox = Hive.box<ShowHive>('favoriteLocalBox');
   final filterBox = Hive.box<ShowHive>('filterBox');
 
   Future<List<ShowHive>> getDataFromFirestore() async {
     QuerySnapshot snapshot =
         await FirebaseFirestore.instance.collection('shows').get();
-    List<ShowHive> data = snapshot.docs.map((doc) {
+    List<ShowHive> firestoreData = snapshot.docs.map((doc) {
       return ShowHive.fromFirestore(doc);
     }).toList();
-    return data;
+    return firestoreData;
   }
 
-  // problem with filling
-  void hiveBoxFilling(List<ShowHive> data) async {
-    for (int i = 0; i < data.length; i++) {
-      Timestamp timeFireTemp = data[i].timeNow;
+  //filling favoriteLocalBox with information received from the Firecloud
+  void favoriteLocalBoxFilling(List<ShowHive> firestoreData) async {
+    for (int i = 0; i < firestoreData.length; i++) {
+      Timestamp timeFireTemp = firestoreData[i].timeNow;
       DateTime timeFireDate = timeFireTemp.toDate();
 
       final showHive = ShowHive(
-          id: data[i].id,
-          name: data[i].name,
-          language: data[i].language,
-          image: data[i].image,
+          id: firestoreData[i].id,
+          name: firestoreData[i].name,
+          language: firestoreData[i].language,
+          image: firestoreData[i].image,
           timeNow: timeFireDate);
-      await box.add(showHive); //box.put(i, showHive);
+      await favoriteLocalBox.add(showHive);
     }
   }
 
-  void hiveBoxClear() async {
-    await box.clear();
+  void favoriteLocalBoxClear() async {
+    await favoriteLocalBox.clear();
   }
 
+  //filtering by show name and fiilin information in filterBox
   void favoriteFilter(String text) async {
-    //filterBoxClear();
     await filterBox.clear();
-    for (int i = 0; i < box.length; i++) {
-      final favoriteBox = box.getAt(i);
+    for (int i = 0; i < favoriteLocalBox.length; i++) {
+      final favoriteBox = favoriteLocalBox.getAt(i);
       String favoriteName = favoriteBox!.name.toLowerCase();
-      if (favoriteName.startsWith(text.toLowerCase())) {
+      if (favoriteName.contains(text.toLowerCase())) {
         final showHive = ShowHive(
             id: favoriteBox.id,
             name: favoriteBox.name,
@@ -53,133 +53,60 @@ class FirecloudeEssense {
         filterBox.add(showHive);
       }
     }
-    filterBox.length;
-    // for (int i = 0; i < filterBox.length; i++) {
-    //   final favoriteFilterBox = filterBox.getAt(i);
-    //   print('-----------------------');
-    //   print(favoriteFilterBox!.id);
-    //   print(favoriteFilterBox.name);
-    //   print(favoriteFilterBox.language);
-    //   print('-----------------------');
-    // }
   }
 
-  // void filterBoxClear() {
-  //   // int filterLenght = filterBox.length;
-  //   for (int i = 0; i < filterBox.length; i++) {
-  //     filterBox.deleteAt(i);
-  //   }
-
-  //   //await filterBox.clear();
-  // }
-
-  // bool checkingForChange(List<ShowHive> data) {
-  //   bool flag = true;
-  //   int count = 0;
-
-  //   if (data.length == box.length) {
-  //     int countLenght = data.length;
-  //     for (int i = 0; i < data.length; i++) {
-  //       final boxInfo = box.getAt(i);
-  //       if (data[i].id == boxInfo?.id) {
-  //         count++;
-  //       }
-  //     }
-  //     if (count == countLenght) {
-  //       flag = false;
-  //     }
-  //   }
-  //   return flag;
-  // }
-
-  // Future<bool> compareData() async {
-  //   bool compare = true;
-  //   Box hiveBox = Hive.box<ShowHive>('showBoxHive');
-  //   List hiveData = hiveBox.values.toList();
-  //   int counter = 0;
-
-  //   QuerySnapshot snapshot =
-  //       await FirebaseFirestore.instance.collection('shows').get();
-
-  //   List<ShowHive> data = snapshot.docs.map((doc) {
-  //     return ShowHive.fromFirestore(doc);
-  //   }).toList();
-
-  //   if (hiveData.length != data.length) {
-  //     compare = false;
-  //   } else {
-  //     for (int i = 0; i < hiveData.length; i++) {
-  //       final hiveBoxInfo = box.getAt(i);
-
-  //       for (int j = 0; j < data.length; j++) {
-  //         if (hiveBoxInfo?.id == data[j].id) {
-  //           counter++;
-  //         }
-  //       }
-  //     }
-  //     if (counter != hiveData.length) {
-  //       compare = false;
-  //     }
-  //   }
-  //   return compare;
-  // }
-
+  //deleting a record from the Firecloud by index
   void deleteFirestoreShow(int id) async {
     QuerySnapshot snapshot =
         await FirebaseFirestore.instance.collection('shows').get();
-    List<ShowHive> data = snapshot.docs.map((doc) {
-      return ShowHive.fromFirestore(doc);
-    }).toList();
+    List<ShowHive> firestoreData = await getDataFromFirestore();
 
-    for (int i = 0; i < data.length; i++) {
-      if (id == data[i].id) {
+    for (int i = 0; i < firestoreData.length; i++) {
+      if (id == firestoreData[i].id) {
         var documentId = snapshot.docs[i].id;
         FirebaseFirestore.instance.collection('shows').doc(documentId).delete();
       }
     }
   }
 
+  //filling favoriteLocalBox or Firebase
   void timeCompare() async {
-    Box hiveBox = Hive.box<ShowHive>('showBoxHive');
-    List hiveData = hiveBox.values.toList();
-
-    DateTime hiveTime = DateTime.utc(1989, 11, 9);
-    DateTime fireTime = DateTime.utc(1989, 11, 9);
-
+    List favoriteShowsData = favoriteLocalBox.values.toList();
+    DateTime favoriteLocalBoxTime = DateTime.utc(1989, 11, 9);
+    DateTime firebaseDataTime = DateTime.utc(1989, 11, 9);
     QuerySnapshot snapshot =
         await FirebaseFirestore.instance.collection('shows').get();
-    List<ShowHive> data = snapshot.docs.map((doc) {
-      return ShowHive.fromFirestore(doc);
-    }).toList();
+    List<ShowHive> firestoreData = await getDataFromFirestore();
 
-    for (int i = 0; i < hiveData.length; i++) {
-      final hiveBoxInfo = box.getAt(i);
-      if (hiveBoxInfo!.timeNow.isAfter(hiveTime)) {
-        hiveTime = hiveBoxInfo.timeNow;
+    //search for the last entry in favoriteShowsData
+    for (int i = 0; i < favoriteShowsData.length; i++) {
+      final hiveBoxInfo = favoriteLocalBox.getAt(i);
+      if (hiveBoxInfo!.timeNow.isAfter(favoriteLocalBoxTime)) {
+        favoriteLocalBoxTime = hiveBoxInfo.timeNow;
       }
     }
-
-    for (int i = 0; i < data.length; i++) {
-      Timestamp timeFireTemp = data[i].timeNow;
+    //search for the last entry in Firestore
+    for (int i = 0; i < firestoreData.length; i++) {
+      Timestamp timeFireTemp = firestoreData[i].timeNow;
       DateTime timeFireDate = timeFireTemp.toDate();
 
-      if (timeFireDate.isAfter(fireTime)) {
-        fireTime = timeFireDate;
+      if (timeFireDate.isAfter(firebaseDataTime)) {
+        firebaseDataTime = timeFireDate;
       }
     }
 
-    if (fireTime.isAfter(hiveTime)) {
-      hiveBoxClear();
-      hiveBoxFilling(data);
+    if (firebaseDataTime.isAfter(favoriteLocalBoxTime)) {
+      favoriteLocalBoxClear();
+      favoriteLocalBoxFilling(firestoreData);
     }
-    if (hiveTime.isAfter(fireTime)) {
-      for (int i = 0; i < data.length; i++) {
+    if (favoriteLocalBoxTime.isAfter(firebaseDataTime)) {
+      for (int i = 0; i < firestoreData.length; i++) {
         var documentId = snapshot.docs[i].id;
         FirebaseFirestore.instance.collection('shows').doc(documentId).delete();
       }
 
-      for (int i = 0; i < hiveData.length; i++) {
-        final hiveBoxInfo = box.getAt(i);
+      for (int i = 0; i < favoriteShowsData.length; i++) {
+        final hiveBoxInfo = favoriteLocalBox.getAt(i);
         FirebaseFirestore.instance.collection('shows').add({
           'id': hiveBoxInfo!.id,
           'title': hiveBoxInfo.name,

@@ -38,6 +38,7 @@ class Image {
 class DataFetcher {
   List<Show> show = [];
 
+  //Getting, parsing json and return List<Show>
   Future<List<Show>> fetchShow(String searchText) async {
     final response = await http
         .get(Uri.parse('https://api.tvmaze.com/search/shows?q=$searchText'));

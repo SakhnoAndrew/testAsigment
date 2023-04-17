@@ -17,9 +17,9 @@ class MainShowListWidget extends StatefulWidget {
 class _MainShowListWidgetState extends State<MainShowListWidget> {
   final box = Hive.box<ShowHive>('mainScreenBox');
   ValueListenable<Box<ShowHive>> _valueListenable =
-      Hive.box<ShowHive>('showBoxHive').listenable();
-  final fireModel = FirecloudeEssense();
-  final hiveModel = HiveWidgetModel();
+      Hive.box<ShowHive>('favoriteLocalBox').listenable();
+  final firecloudModel = FirecloudeEssense();
+  final localDatabaseModel = HiveWidgetModel();
   List iconsMass = [];
 
   @override
@@ -34,9 +34,11 @@ class _MainShowListWidgetState extends State<MainShowListWidget> {
       valueListenable: _valueListenable,
       builder: (context, Box<ShowHive> boxs, _) {
         iconsMass.clear();
+        //favorite icons collor
         for (int i = 0; i < box.length; i++) {
           final showinfo = box.getAt(i);
-          int comparasion = hiveModel.checkingForFavorite(showinfo!.id);
+          int comparasion =
+              localDatabaseModel.checkingForFavorite(showinfo!.id);
           if (comparasion != 0) iconsMass.add(Icons.favorite);
           if (comparasion == 0) iconsMass.add(Icons.favorite_border);
         }
@@ -93,6 +95,7 @@ class _MainShowListWidgetState extends State<MainShowListWidget> {
                             if (iconsMass[index] == Icons.favorite_border) {
                               final timeNow = DateTime.now();
                               setState(() {});
+                              //add informaition in Firecloud
                               FirebaseFirestore.instance
                                   .collection('shows')
                                   .add({
@@ -102,13 +105,14 @@ class _MainShowListWidgetState extends State<MainShowListWidget> {
                                 'imageURL': linkImage,
                                 'time': timeNow,
                               });
-                              hiveModel.saveShow(id, showName!, showLanguage!,
-                                  linkImage, timeNow);
+                              //add information in local Database
+                              localDatabaseModel.saveShow(id, showName!,
+                                  showLanguage!, linkImage, timeNow);
                               iconsMass[index] = Icons.favorite;
                               setState(() {});
                             } else {
-                              fireModel.deleteFirestoreShow(id);
-                              hiveModel.deleteShow(id);
+                              firecloudModel.deleteFirestoreShow(id);
+                              localDatabaseModel.deleteShow(id);
                               iconsMass[index] = Icons.favorite_border;
                               setState(() {});
                             }
