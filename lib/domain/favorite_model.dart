@@ -6,6 +6,7 @@ import 'package:flutter_application_1/domain/hive_model.dart';
 
 class FirecloudeEssense {
   final box = Hive.box<ShowHive>('showBoxHive');
+  final filterBox = Hive.box<ShowHive>('filterBox');
 
   Future<List<ShowHive>> getDataFromFirestore() async {
     QuerySnapshot snapshot =
@@ -16,6 +17,7 @@ class FirecloudeEssense {
     return data;
   }
 
+  // problem with filling
   void hiveBoxFilling(List<ShowHive> data) async {
     for (int i = 0; i < data.length; i++) {
       Timestamp timeFireTemp = data[i].timeNow;
@@ -27,7 +29,7 @@ class FirecloudeEssense {
           language: data[i].language,
           image: data[i].image,
           timeNow: timeFireDate);
-      await box.put(i, showHive);
+      await box.add(showHive); //box.put(i, showHive);
     }
   }
 
@@ -35,56 +37,92 @@ class FirecloudeEssense {
     await box.clear();
   }
 
-  bool checkingForChange(List<ShowHive> data) {
-    bool flag = true;
-    int count = 0;
-
-    if (data.length == box.length) {
-      int countLenght = data.length;
-      for (int i = 0; i < data.length; i++) {
-        final boxInfo = box.getAt(i);
-        if (data[i].id == boxInfo?.id) {
-          count++;
-        }
-      }
-      if (count == countLenght) {
-        flag = false;
-      }
-    }
-    return flag;
-  }
-
-  Future<bool> compareData() async {
-    bool compare = true;
-    Box hiveBox = Hive.box<ShowHive>('showBoxHive');
-    List hiveData = hiveBox.values.toList();
-    int counter = 0;
-
-    QuerySnapshot snapshot =
-        await FirebaseFirestore.instance.collection('shows').get();
-
-    List<ShowHive> data = snapshot.docs.map((doc) {
-      return ShowHive.fromFirestore(doc);
-    }).toList();
-
-    if (hiveData.length != data.length) {
-      compare = false;
-    } else {
-      for (int i = 0; i < hiveData.length; i++) {
-        final hiveBoxInfo = box.getAt(i);
-
-        for (int j = 0; j < data.length; j++) {
-          if (hiveBoxInfo?.id == data[j].id) {
-            counter++;
-          }
-        }
-      }
-      if (counter != hiveData.length) {
-        compare = false;
+  void favoriteFilter(String text) async {
+    //filterBoxClear();
+    await filterBox.clear();
+    for (int i = 0; i < box.length; i++) {
+      final favoriteBox = box.getAt(i);
+      String favoriteName = favoriteBox!.name.toLowerCase();
+      if (favoriteName.startsWith(text.toLowerCase())) {
+        final showHive = ShowHive(
+            id: favoriteBox.id,
+            name: favoriteBox.name,
+            language: favoriteBox.language,
+            image: favoriteBox.image,
+            timeNow: favoriteBox.timeNow);
+        filterBox.add(showHive);
       }
     }
-    return compare;
+    filterBox.length;
+    // for (int i = 0; i < filterBox.length; i++) {
+    //   final favoriteFilterBox = filterBox.getAt(i);
+    //   print('-----------------------');
+    //   print(favoriteFilterBox!.id);
+    //   print(favoriteFilterBox.name);
+    //   print(favoriteFilterBox.language);
+    //   print('-----------------------');
+    // }
   }
+
+  // void filterBoxClear() {
+  //   // int filterLenght = filterBox.length;
+  //   for (int i = 0; i < filterBox.length; i++) {
+  //     filterBox.deleteAt(i);
+  //   }
+
+  //   //await filterBox.clear();
+  // }
+
+  // bool checkingForChange(List<ShowHive> data) {
+  //   bool flag = true;
+  //   int count = 0;
+
+  //   if (data.length == box.length) {
+  //     int countLenght = data.length;
+  //     for (int i = 0; i < data.length; i++) {
+  //       final boxInfo = box.getAt(i);
+  //       if (data[i].id == boxInfo?.id) {
+  //         count++;
+  //       }
+  //     }
+  //     if (count == countLenght) {
+  //       flag = false;
+  //     }
+  //   }
+  //   return flag;
+  // }
+
+  // Future<bool> compareData() async {
+  //   bool compare = true;
+  //   Box hiveBox = Hive.box<ShowHive>('showBoxHive');
+  //   List hiveData = hiveBox.values.toList();
+  //   int counter = 0;
+
+  //   QuerySnapshot snapshot =
+  //       await FirebaseFirestore.instance.collection('shows').get();
+
+  //   List<ShowHive> data = snapshot.docs.map((doc) {
+  //     return ShowHive.fromFirestore(doc);
+  //   }).toList();
+
+  //   if (hiveData.length != data.length) {
+  //     compare = false;
+  //   } else {
+  //     for (int i = 0; i < hiveData.length; i++) {
+  //       final hiveBoxInfo = box.getAt(i);
+
+  //       for (int j = 0; j < data.length; j++) {
+  //         if (hiveBoxInfo?.id == data[j].id) {
+  //           counter++;
+  //         }
+  //       }
+  //     }
+  //     if (counter != hiveData.length) {
+  //       compare = false;
+  //     }
+  //   }
+  //   return compare;
+  // }
 
   void deleteFirestoreShow(int id) async {
     QuerySnapshot snapshot =

@@ -17,6 +17,8 @@ void main() async {
   Hive.registerAdapter(ShowNameAdapter());
   await Hive.openBox<ShowHive>('showBoxHive');
   await Hive.openBox<ShowHive>('mainScreenBox');
+  await Hive.openBox<ShowHive>('favoriteScreenBox');
+  await Hive.openBox<ShowHive>('filterBox');
   await Hive.openBox<ShowName>('nameBox');
 
   await Firebase.initializeApp(

@@ -37,9 +37,9 @@ class HiveWidgetModel {
     }
   }
 
-  void hiveClear() {
-    box.clear();
-  }
+  // void hiveClear() {
+  //   box.clear();
+  // }
 }
 
 class ShowHive {

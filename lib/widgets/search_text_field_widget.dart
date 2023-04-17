@@ -4,6 +4,7 @@ import 'package:hive/hive.dart';
 import '../constants.dart';
 import 'package:flutter_application_1/domain/api_client.dart';
 
+import '../domain/favorite_model.dart';
 import '../domain/hive_model.dart';
 import '../domain/main_model.dart';
 
@@ -20,6 +21,7 @@ class _SearchTextFieldWidgetState extends State<SearchTextFieldWidget> {
   TextEditingController? controller = TextEditingController(text: '');
   List<Show> model = [];
   final mainModel = MainScreenModel();
+  final favorite = FirecloudeEssense();
 
   @override
   void initState() {
@@ -42,6 +44,7 @@ class _SearchTextFieldWidgetState extends State<SearchTextFieldWidget> {
         () async {
           model.clear();
           mainModel.mainScreenBoxClear();
+          //favorite.favoriteFilter(text);
           setState(() {});
           model = await DataFetcher().fetchShow(text);
           setState(() {});

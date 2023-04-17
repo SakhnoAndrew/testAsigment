@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_application_1/pages/navigation_drawer.dart';
 import 'package:flutter_application_1/constants.dart';
+import '../widgets/favorite_filter.dart';
 import '../widgets/favorite_show_list.dart';
 
 class FavoritePage extends StatelessWidget {
@@ -17,7 +18,14 @@ class FavoritePage extends StatelessWidget {
           title: const Text(Constants.favoriteTitie),
         ),
         drawer: const NavigationDrawerWidget(),
-        body: const FavoriteShowListWidget(),
+        body: Stack(children: const [
+          FavoriteShowListWidget(),
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: FavoriteFilterWidget(),
+          )
+        ]),
+        //const FavoriteShowListWidget(),
       ),
     );
   }
