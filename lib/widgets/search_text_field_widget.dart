@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 
 import '../constants.dart';
 import 'package:flutter_application_1/domain/api_client.dart';
 
-import '../domain/favorite_model.dart';
 import '../domain/hive_model.dart';
 import '../domain/main_model.dart';
 
@@ -20,8 +20,8 @@ class _SearchTextFieldWidgetState extends State<SearchTextFieldWidget> {
   dynamic nameBoxInfo;
   TextEditingController? controller = TextEditingController(text: '');
   List<Show> model = [];
-  final mainModel = MainScreenModel();
-  final favorite = FirecloudeEssense();
+
+  final getIt = GetIt.instance;
 
   @override
   void initState() {
@@ -43,12 +43,12 @@ class _SearchTextFieldWidgetState extends State<SearchTextFieldWidget> {
         const Duration(milliseconds: 750),
         () async {
           model.clear();
-          mainModel.mainScreenBoxClear();
+          getIt<MainScreenModel>().mainScreenBoxClear();
           setState(() {});
           model = await DataFetcher().fetchShow(text);
           setState(() {});
-          mainModel.mainScreenBoxFilling(model);
-          mainModel.setName(text);
+          getIt<MainScreenModel>().mainScreenBoxFilling(model);
+          getIt<MainScreenModel>().setName(text);
           setState(() {});
         },
       );

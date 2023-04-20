@@ -12,21 +12,21 @@ class NavigationDrawerWidget extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              buildHeader(context),
-              buildMenuItem(context),
+              _navigationDrawerHeader(context),
+              _navigationDrawerMenuItem(context),
             ],
           ),
         ),
       );
 }
 
-Widget buildHeader(BuildContext context) => Container(
+Widget _navigationDrawerHeader(BuildContext context) => Container(
       padding: EdgeInsets.only(
         top: MediaQuery.of(context).padding.top,
       ),
     );
 
-Widget buildMenuItem(BuildContext context) => Column(
+Widget _navigationDrawerMenuItem(BuildContext context) => Column(
       children: [
         ListTile(
           leading: const Icon(

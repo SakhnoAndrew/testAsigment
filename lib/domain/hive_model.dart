@@ -23,10 +23,10 @@ class HiveWidgetModel {
         counter++;
       }
     }
-
     return counter;
   }
 
+  //hive DB work with index
   void deleteShow(int id) {
     for (int index = 0; index < box.length; index++) {
       final showinfo = box.getAt(index);

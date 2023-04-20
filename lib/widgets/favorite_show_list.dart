@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:get_it/get_it.dart';
 
 import '../constants.dart';
 import '../domain/favorite_model.dart';
@@ -18,8 +19,8 @@ class _FavoriteShowListWidgetState extends State<FavoriteShowListWidget> {
   final ValueListenable<Box<ShowHive>> _valueListenable =
       Hive.box<ShowHive>('favoriteScreenBox').listenable();
   final favoriteBox = Hive.box<ShowHive>('favoriteLocalBox');
-  final fireModel = FirecloudeEssense();
-  final hiveModel = HiveWidgetModel();
+
+  final getIt = GetIt.instance;
 
   @override
   void initState() {
@@ -109,8 +110,9 @@ class _FavoriteShowListWidgetState extends State<FavoriteShowListWidget> {
                         child: Center(
                           child: IconButton(
                             onPressed: () {
-                              fireModel.deleteFirestoreShow(showId);
-                              hiveModel.deleteShow(showId);
+                              getIt<FirecloudeModel>()
+                                  .deleteFirestoreShow(showId);
+                              getIt<HiveWidgetModel>().deleteShow(showId);
                               startShowsBilding();
                               setState(() {});
                             },

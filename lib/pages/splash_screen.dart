@@ -19,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return AnimatedSplashScreen(
       splash: Lottie.asset(Constants.lottieAssets),
       nextScreen: const MainPage(),
-      duration: 3000,
+      duration: 1000,
       backgroundColor: Colors.blue,
       pageTransitionType: PageTransitionType.fade,
     );

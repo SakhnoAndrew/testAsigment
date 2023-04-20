@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:get_it/get_it.dart';
 
 import '../constants.dart';
 import '../domain/favorite_model.dart';
@@ -18,9 +19,9 @@ class _MainShowListWidgetState extends State<MainShowListWidget> {
   final box = Hive.box<ShowHive>('mainScreenBox');
   ValueListenable<Box<ShowHive>> _valueListenable =
       Hive.box<ShowHive>('favoriteLocalBox').listenable();
-  final firecloudModel = FirecloudeEssense();
-  final localDatabaseModel = HiveWidgetModel();
   List iconsMass = [];
+
+  final getIt = GetIt.instance;
 
   @override
   void initState() {
@@ -38,7 +39,7 @@ class _MainShowListWidgetState extends State<MainShowListWidget> {
         for (int i = 0; i < box.length; i++) {
           final showinfo = box.getAt(i);
           int comparasion =
-              localDatabaseModel.checkingForFavorite(showinfo!.id);
+              getIt<HiveWidgetModel>().checkingForFavorite(showinfo!.id);
           if (comparasion != 0) iconsMass.add(Icons.favorite);
           if (comparasion == 0) iconsMass.add(Icons.favorite_border);
         }
@@ -48,18 +49,13 @@ class _MainShowListWidgetState extends State<MainShowListWidget> {
             itemCount: box.length,
             itemBuilder: (BuildContext context, int index) {
               final showinfo = box.getAt(index);
-              int id = showinfo?.id as int;
-              var linkImage = showinfo?.image ?? '';
-              var showName = showinfo?.name;
-              var showLanguage = showinfo?.language;
-
               return Card(
                 child: Row(
                   children: [
                     Padding(
                       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                       child: CircleAvatar(
-                        backgroundImage: NetworkImage(linkImage),
+                        backgroundImage: NetworkImage(showinfo?.image ?? ''),
                         radius: 30,
                       ),
                     ),
@@ -70,7 +66,7 @@ class _MainShowListWidgetState extends State<MainShowListWidget> {
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(0, 10, 10, 10),
                             child: Text(
-                              ('$showName'),
+                              (showinfo?.name as String),
                               textDirection: TextDirection.ltr,
                               style: const TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.bold),
@@ -80,7 +76,8 @@ class _MainShowListWidgetState extends State<MainShowListWidget> {
                         Center(
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(0, 10, 60, 10),
-                            child: Text("${Constants.language} $showLanguage"),
+                            child: Text(
+                                "${Constants.language} ${showinfo?.language}"),
                           ),
                         ),
                       ],
@@ -99,20 +96,26 @@ class _MainShowListWidgetState extends State<MainShowListWidget> {
                               FirebaseFirestore.instance
                                   .collection('shows')
                                   .add({
-                                'id': id,
-                                'title': showName,
-                                'text': showLanguage,
-                                'imageURL': linkImage,
+                                'id': showinfo?.id as int,
+                                'title': showinfo?.name,
+                                'text': showinfo?.language,
+                                'imageURL': showinfo?.image ?? '',
                                 'time': timeNow,
                               });
                               //add information in local Database
-                              localDatabaseModel.saveShow(id, showName!,
-                                  showLanguage!, linkImage, timeNow);
+                              getIt<HiveWidgetModel>().saveShow(
+                                  showinfo?.id as int,
+                                  showinfo?.name as String,
+                                  showinfo?.language as String,
+                                  showinfo?.image ?? '',
+                                  timeNow);
                               iconsMass[index] = Icons.favorite;
                               setState(() {});
                             } else {
-                              firecloudModel.deleteFirestoreShow(id);
-                              localDatabaseModel.deleteShow(id);
+                              getIt<FirecloudeModel>()
+                                  .deleteFirestoreShow(showinfo?.id as int);
+                              getIt<HiveWidgetModel>()
+                                  .deleteShow(showinfo?.id as int);
                               iconsMass[index] = Icons.favorite_border;
                               setState(() {});
                             }

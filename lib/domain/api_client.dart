@@ -36,8 +36,6 @@ class Image {
 }
 
 class DataFetcher {
-  List<Show> show = [];
-
   //Getting, parsing json and return List<Show>
   Future<List<Show>> fetchShow(String searchText) async {
     final response = await http
@@ -47,15 +45,29 @@ class DataFetcher {
 
       var showInfo = data.map((e) => e["show"] as Map<String, dynamic>);
       var imageInfo = showInfo.map((e) => e["image"] as Map<String, dynamic>?);
+      // var imageMap = showInfo.map((e) => e['image'] as Map<String, dynamic>);
+
+      // var imageInfoMedium = imageInfo as Map<String, dynamic>;
       var image =
           imageInfo.map((e) => Image(medium: e?["medium"] as String?)).toList();
+      // var imageOne =
+      // imageInfo.map((e) => Image(medium: e?["medium"] as String?)).toString();
       var show = showInfo
           .map(
             (e) => Show(
               id: e['id'] as int,
               name: e['name'] as String,
               language: e['language'] as String,
-              image: '',
+              image: ''
+
+              //imageMap.map((e) => e['medium'] as String?);
+              //imageInfoMedium['medium'] as String ?? ''
+              //  imageInfo
+              //     .map((e) => Image(medium: e?["medium"] as String?))
+              //     .toString()
+              ,
+
+              //e['medium'] as String? ?? '',
             ),
           )
           .toList();
@@ -65,7 +77,7 @@ class DataFetcher {
         } else {
           show[i].image = image[i].medium;
         }
-      }
+      } //--
       return show;
     } else {
       throw Exception(Constants.apiExeption);

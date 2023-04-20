@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:get_it/get_it.dart';
 
 import '../constants.dart';
 import '../domain/favorite_model.dart';
@@ -16,7 +17,8 @@ class _FavoriteFilterWidgetState extends State<FavoriteFilterWidget> {
   final favoriteResultBox = Hive.box<ShowHive>('favoriteScreenBox');
   final favoriteBox = Hive.box<ShowHive>('favoriteLocalBox');
   final filterBox = Hive.box<ShowHive>('filterBox');
-  final favoriteFilter = FirecloudeEssense();
+
+  final getIt = GetIt.instance;
 
   @override
   void initState() {
@@ -45,7 +47,7 @@ class _FavoriteFilterWidgetState extends State<FavoriteFilterWidget> {
       () async {
         if (text.isNotEmpty) {
           await favoriteResultBox.clear();
-          favoriteFilter.favoriteFilter(text);
+          getIt<FirecloudeModel>().favoriteFilter(text);
           for (int i = 0; i < filterBox.length; i++) {
             final filling = filterBox.getAt(i);
             final showHive = ShowHive(
