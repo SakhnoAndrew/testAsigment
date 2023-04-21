@@ -58,14 +58,14 @@ class DataFetcher {
               id: e['id'] as int,
               name: e['name'] as String,
               language: e['language'] as String,
-              image: ''
+              image: '',
 
               //imageMap.map((e) => e['medium'] as String?);
               //imageInfoMedium['medium'] as String ?? ''
               //  imageInfo
               //     .map((e) => Image(medium: e?["medium"] as String?))
               //     .toString()
-              ,
+              //,
 
               //e['medium'] as String? ?? '',
             ),
