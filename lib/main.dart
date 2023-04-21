@@ -4,6 +4,7 @@ import 'package:flutter_application_1/pages/main_pages.dart';
 import 'package:flutter_application_1/pages/favorite_page.dart';
 import 'package:flutter_application_1/domain/hive_model.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'domain/favorite_model.dart';
 import 'domain/main_model.dart';
 import 'firebase_options.dart';
@@ -35,13 +36,15 @@ void main() async {
   getIt<FirecloudeModel>().timeCompare();
 
   runApp(
-    MaterialApp(
-      initialRoute: '/splash',
-      routes: {
-        '/splash': (context) => const SplashScreen(),
-        '/': (context) => const MainPage(),
-        '/favorite': (context) => const FavoritePage(),
-      },
+    ProviderScope(
+      child: MaterialApp(
+        initialRoute: '/splash',
+        routes: {
+          '/splash': (context) => const SplashScreen(),
+          '/': (context) => const MainPage(),
+          '/favorite': (context) => const FavoritePage(),
+        },
+      ),
     ),
   );
 }

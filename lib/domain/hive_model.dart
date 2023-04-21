@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -93,12 +94,17 @@ class ShowHiveAdapter extends TypeAdapter<ShowHive> {
   }
 }
 
+@immutable
 class ShowName {
   final String name;
 
-  ShowName({
+  const ShowName({
     required this.name,
   });
+
+  ShowName copyWith({String? name}) {
+    return ShowName(name: name ?? this.name);
+  }
 }
 
 class ShowNameAdapter extends TypeAdapter<ShowName> {
