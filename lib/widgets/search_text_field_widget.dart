@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
+
 import 'package:hive/hive.dart';
 
 import '../constants.dart';
@@ -21,7 +21,7 @@ class _SearchTextFieldWidgetState extends State<SearchTextFieldWidget> {
   TextEditingController? controller = TextEditingController(text: '');
   List<Show> model = [];
 
-  final getIt = GetIt.instance;
+  final mainScreenModel = MainScreenModel();
 
   @override
   void initState() {
@@ -43,12 +43,12 @@ class _SearchTextFieldWidgetState extends State<SearchTextFieldWidget> {
         const Duration(milliseconds: 750),
         () async {
           model.clear();
-          getIt<MainScreenModel>().mainScreenBoxClear();
+          mainScreenModel.mainScreenBoxClear();
           setState(() {});
           model = await DataFetcher().fetchShow(text);
           setState(() {});
-          getIt<MainScreenModel>().mainScreenBoxFilling(model);
-          getIt<MainScreenModel>().setName(text);
+          mainScreenModel.mainScreenBoxFilling(model);
+          mainScreenModel.setName(text);
           setState(() {});
         },
       );

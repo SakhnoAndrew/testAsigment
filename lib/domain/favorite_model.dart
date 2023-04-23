@@ -19,15 +19,15 @@ class FirecloudeModel {
 
   //filling favoriteLocalBox with information received from the Firecloud
   void favoriteLocalBoxFilling(List<ShowHive> firestoreData) async {
-    for (int i = 0; i < firestoreData.length; i++) {
-      Timestamp timeFireTemp = firestoreData[i].timeNow;
+    for (var firestoreDataItem in firestoreData) {
+      Timestamp timeFireTemp = firestoreDataItem.timeNow;
       DateTime timeFireDate = timeFireTemp.toDate();
 
       final showHive = ShowHive(
-          id: firestoreData[i].id,
-          name: firestoreData[i].name,
-          language: firestoreData[i].language,
-          image: firestoreData[i].image,
+          id: firestoreDataItem.id,
+          name: firestoreDataItem.name,
+          language: firestoreDataItem.language,
+          image: firestoreDataItem.image,
           timeNow: timeFireDate);
       await favoriteLocalBox.add(showHive);
     }
@@ -40,19 +40,17 @@ class FirecloudeModel {
   //filtering by show name and fiilin information in filterBox
   void favoriteFilter(String text) async {
     await filterBox.clear();
-    for (int i = 0; i < favoriteLocalBox.length; i++) {
-      final ShowHive? favoriteBox = favoriteLocalBox.getAt(i);
-      if (favoriteBox != null) {
-        String favoriteName = favoriteBox.name.toLowerCase();
-        if (favoriteName.contains(text.toLowerCase())) {
-          final showHive = ShowHive(
-              id: favoriteBox.id,
-              name: favoriteBox.name,
-              language: favoriteBox.language,
-              image: favoriteBox.image,
-              timeNow: favoriteBox.timeNow);
-          filterBox.add(showHive);
-        }
+
+    for (var favoriteBox in favoriteLocalBox.values) {
+      String favoriteName = favoriteBox.name.toLowerCase();
+      if (favoriteName.contains(text.toLowerCase())) {
+        final showHive = ShowHive(
+            id: favoriteBox.id,
+            name: favoriteBox.name,
+            language: favoriteBox.language,
+            image: favoriteBox.image,
+            timeNow: favoriteBox.timeNow);
+        filterBox.add(showHive);
       }
     }
   }
@@ -87,8 +85,11 @@ class FirecloudeModel {
 
     //search for the last entry in Firestore
     firestoreData.sort((a, b) => a.timeNow.compareTo(b.timeNow));
-    Timestamp timeFireTemp = firestoreData.last.timeNow;
-    firebaseDataTime = timeFireTemp.toDate();
+    Timestamp? timeFireTemp;
+    if (firestoreData.isNotEmpty) {
+      timeFireTemp = firestoreData.last.timeNow;
+      firebaseDataTime = timeFireTemp?.toDate() ?? DateTime.utc(1989, 11, 9);
+    }
 
     if (firebaseDataTime.isAfter(favoriteLocalBoxTime)) {
       favoriteLocalBoxClear();

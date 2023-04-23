@@ -62,7 +62,7 @@ class _FavoriteShowListWidgetState extends State<FavoriteShowListWidget> {
                 String showLinkImage = '';
                 String showName = '';
                 String showLanguage = '';
-
+//Index out of range protection, can sometimes go beyond the loop
                 if (index < box.length) {
                   showInfo = box.getAt(index);
                   showId = showInfo?.id as int;

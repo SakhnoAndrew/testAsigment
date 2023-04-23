@@ -45,13 +45,8 @@ class DataFetcher {
 
       var showInfo = data.map((e) => e["show"] as Map<String, dynamic>);
       var imageInfo = showInfo.map((e) => e["image"] as Map<String, dynamic>?);
-      // var imageMap = showInfo.map((e) => e['image'] as Map<String, dynamic>);
-
-      // var imageInfoMedium = imageInfo as Map<String, dynamic>;
       var image =
           imageInfo.map((e) => Image(medium: e?["medium"] as String?)).toList();
-      // var imageOne =
-      // imageInfo.map((e) => Image(medium: e?["medium"] as String?)).toString();
       var show = showInfo
           .map(
             (e) => Show(
@@ -59,15 +54,6 @@ class DataFetcher {
               name: e['name'] as String,
               language: e['language'] as String,
               image: '',
-
-              //imageMap.map((e) => e['medium'] as String?);
-              //imageInfoMedium['medium'] as String ?? ''
-              //  imageInfo
-              //     .map((e) => Image(medium: e?["medium"] as String?))
-              //     .toString()
-              //,
-
-              //e['medium'] as String? ?? '',
             ),
           )
           .toList();

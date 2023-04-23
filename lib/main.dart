@@ -5,7 +5,6 @@ import 'package:flutter_application_1/pages/favorite_page.dart';
 import 'package:flutter_application_1/domain/hive_model.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'domain/favorite_model.dart';
-import 'domain/main_model.dart';
 import 'firebase_options.dart';
 
 import 'package:hive_flutter/hive_flutter.dart';
@@ -26,7 +25,6 @@ void main() async {
   final getIt = GetIt.instance;
   getIt.registerSingleton<HiveWidgetModel>(HiveWidgetModel());
   getIt.registerSingleton<FirecloudeModel>(FirecloudeModel());
-  getIt.registerSingleton<MainScreenModel>(MainScreenModel());
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
