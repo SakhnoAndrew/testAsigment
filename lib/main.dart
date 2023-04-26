@@ -37,6 +37,7 @@ void main() async {
 
   runApp(
     ProviderScope(
+      //for provider
       child: MaterialApp(
         initialRoute: '/splash',
         routes: {

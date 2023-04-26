@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/navigation_drawer.dart';
 import 'package:flutter_application_1/constants.dart';
 import '../widgets/main_show_list.dart';
+import '../widgets/provider_list.dart';
 import '../widgets/search_text_field_widget.dart';
 
 class MainPage extends StatelessWidget {
@@ -18,7 +19,8 @@ class MainPage extends StatelessWidget {
         ),
         drawer: const NavigationDrawerWidget(),
         body: Stack(children: const [
-          MainShowListWidget(),
+          //MainShowListWidget()
+          ProviderList(),
           Padding(
             padding: EdgeInsets.all(8.0),
             child: SearchTextFieldWidget(),
