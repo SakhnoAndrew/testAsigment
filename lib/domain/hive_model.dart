@@ -1,42 +1,37 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class HiveWidgetModel {
-  final box = Hive.box<ShowHive>('showBox');
+  final box = Hive.box<ShowHive>('favoriteLocalBox');
+  final timeNow = DateTime.now;
 
-  void saveShow(int id, String name, String language, String image) async {
-    final box = await Hive.openBox<ShowHive>('showBox');
-    final showHive =
-        ShowHive(id: id, name: name, language: language, image: image);
+  void saveShow(int id, String name, String language, String image,
+      dynamic timeNow) async {
+    final box = await Hive.openBox<ShowHive>('favoriteLocalBox');
+    final showHive = ShowHive(
+        id: id, name: name, language: language, image: image, timeNow: timeNow);
     await box.add(showHive);
   }
 
-  int checkingForFavorite(String name, String language, String image) {
+  int checkingForFavorite(int id) {
     int counter = 0;
     for (int index = 0; index < box.length; index++) {
       final showinfo = box.getAt(index);
-      var linkImage = showinfo?.image ?? '';
-      var showName = showinfo?.name;
-      var showLanguage = showinfo?.language;
-
-      if (name == showName && language == showLanguage && image == linkImage) {
+      var showId = showinfo?.id;
+      if (id == showId) {
         counter++;
       }
     }
-
     return counter;
   }
 
-  void deleteShow(String name, String language, String image) {
+  //hive DB work with index
+  void deleteShow(int id) {
     for (int index = 0; index < box.length; index++) {
       final showinfo = box.getAt(index);
-      var linkImage = showinfo?.image ?? '';
-      var showName = showinfo?.name;
-      var showLanguage = showinfo?.language;
-
-      if (name == showName && language == showLanguage && image == linkImage) {
+      var showId = showinfo?.id;
+      if (id == showId) {
         box.deleteAt(index);
       }
     }
@@ -48,12 +43,14 @@ class ShowHive {
   final String name;
   final String language;
   final String image;
+  final dynamic timeNow;
 
   ShowHive({
     required this.id,
     required this.name,
     required this.language,
     required this.image,
+    required this.timeNow,
   });
 
   factory ShowHive.fromFirestore(DocumentSnapshot doc) {
@@ -63,6 +60,7 @@ class ShowHive {
       name: data['title'],
       language: data['text'],
       image: data['imageURL'],
+      timeNow: data['time'],
     );
   }
 
@@ -80,7 +78,9 @@ class ShowHiveAdapter extends TypeAdapter<ShowHive> {
     final name = reader.readString();
     final language = reader.readString();
     final image = reader.readString();
-    return ShowHive(id: id, name: name, language: language, image: image);
+    final time = reader.read();
+    return ShowHive(
+        id: id, name: name, language: language, image: image, timeNow: time);
   }
 
   @override
@@ -89,21 +89,33 @@ class ShowHiveAdapter extends TypeAdapter<ShowHive> {
     writer.writeString(obj.name);
     writer.writeString(obj.language);
     writer.writeString(obj.image);
+    writer.write(obj.timeNow);
   }
 }
 
-class ShowProvider extends InheritedNotifier {
-  final HiveWidgetModel model;
-  const ShowProvider({Key? key, required Widget child, required this.model})
-      : super(key: key, child: child);
+class ShowName {
+  final String name;
 
-  static ShowProvider? watch(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<ShowProvider>();
+  ShowName({
+    required this.name,
+  });
+}
+
+class ShowNameAdapter extends TypeAdapter<ShowName> {
+  @override
+  final typeId = 1;
+
+  @override
+  ShowName read(BinaryReader reader) {
+    final name = reader.readString();
+
+    return ShowName(
+      name: name,
+    );
   }
 
-  static ShowProvider? read(BuildContext context) {
-    final widget =
-        context.getElementForInheritedWidgetOfExactType<ShowProvider>()?.widget;
-    return widget is ShowProvider ? widget : null;
+  @override
+  void write(BinaryWriter writer, ShowName obj) {
+    writer.writeString(obj.name);
   }
 }

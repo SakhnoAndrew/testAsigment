@@ -1,135 +1,115 @@
 import 'dart:core';
-import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_core/firebase_core.dart';
-// import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_application_1/domain/hive_model.dart';
 
-// class FavoriteModel {
-//   final int? id;
-//   final String? name;
-//   final String? language;
-//   final String? image;
-
-//   FavoriteModel({
-//     required this.id,
-//     required this.name,
-//     required this.language,
-//     required this.image,
-//   });
-
-//   factory FavoriteModel.fromFirestore(DocumentSnapshot doc) {
-//     dynamic data = doc.data();
-//     return FavoriteModel(
-//       id: data['id'],
-//       name: data['title'],
-//       language: data['text'],
-//       image: data['imageURL'],
-//     );
-//   }
-
-//   // factory FavoriteModel.fromMap(Map<String, dynamic> data) {
-//   //   final int id = data['id'];
-//   //   final String name = data['name'];
-//   //   final String language = data['language'];
-//   //   final String? image = data['image'];
-//   //   return FavoriteModel(id: id, name: name, language: language, image: image);
-//   // }
-// }
-
-class FirecloudeEssense {
-  final box = Hive.box<ShowHive>('showBox');
+class FirecloudeModel {
+  final favoriteLocalBox = Hive.box<ShowHive>('favoriteLocalBox');
+  final filterBox = Hive.box<ShowHive>('filterBox');
 
   Future<List<ShowHive>> getDataFromFirestore() async {
     QuerySnapshot snapshot =
         await FirebaseFirestore.instance.collection('shows').get();
-    List<ShowHive> data = snapshot.docs.map((doc) {
+    List<ShowHive> firestoreData = snapshot.docs.map((doc) {
       return ShowHive.fromFirestore(doc);
     }).toList();
-    return data;
+    return firestoreData;
   }
 
-  void hiveBoxFilling(List<ShowHive> data) async {
-    for (int i = 0; i < data.length; i++) {
+  //filling favoriteLocalBox with information received from the Firecloud
+  void favoriteLocalBoxFilling(List<ShowHive> firestoreData) async {
+    for (var firestoreDataItem in firestoreData) {
+      Timestamp timeFireTemp = firestoreDataItem.timeNow;
+      DateTime timeFireDate = timeFireTemp.toDate();
+
       final showHive = ShowHive(
-          id: data[i].id,
-          name: data[i].name,
-          language: data[i].language,
-          image: data[i].image);
-      await box.put(i, showHive);
+          id: firestoreDataItem.id,
+          name: firestoreDataItem.name,
+          language: firestoreDataItem.language,
+          image: firestoreDataItem.image,
+          timeNow: timeFireDate);
+      await favoriteLocalBox.add(showHive);
     }
   }
 
-  void hiveBoxClear() async {
-    await box.clear();
+  void favoriteLocalBoxClear() async {
+    await favoriteLocalBox.clear();
   }
 
-  bool checkingForChange(List<ShowHive> data) {
-    bool flag = true;
-    int count = 0;
+  //filtering by show name and fiilin information in filterBox
+  void favoriteFilter(String text) async {
+    await filterBox.clear();
 
-    if (data.length == box.length) {
-      int countLenght = data.length;
-      for (int i = 0; i < data.length; i++) {
-        final boxInfo = box.getAt(i);
-        if (data[i].id == boxInfo?.id) {
-          count++;
-        }
-      }
-      if (count == countLenght) {
-        flag = false;
+    for (var favoriteBox in favoriteLocalBox.values) {
+      String favoriteName = favoriteBox.name.toLowerCase();
+      if (favoriteName.contains(text.toLowerCase())) {
+        final showHive = ShowHive(
+            id: favoriteBox.id,
+            name: favoriteBox.name,
+            language: favoriteBox.language,
+            image: favoriteBox.image,
+            timeNow: favoriteBox.timeNow);
+        filterBox.add(showHive);
       }
     }
-    return flag;
   }
 
-  // int checkingForFavorite (int id){
-  //       int counter = 0;
+  //deleting a record from the Firecloud by index
+  void deleteFirestoreShow(int id) async {
+    QuerySnapshot snapshot =
+        await FirebaseFirestore.instance.collection('shows').get();
+    List<ShowHive> firestoreData = await getDataFromFirestore();
 
-  //   for (int index = 0; index < box.length; index++) {
-  //     final showinfo = box.getAt(index);
-  //     var linkImage = showinfo?.image ?? '';
-  //     var showName = showinfo?.name;
-  //     var showLanguage = showinfo?.language;
+    for (int i = 0; i < firestoreData.length; i++) {
+      if (id == firestoreData[i].id) {
+        var documentId = snapshot.docs[i].id;
+        FirebaseFirestore.instance.collection('shows').doc(documentId).delete();
+      }
+    }
+  }
 
-  //     if (name == showName && language == showLanguage && image == linkImage) {
-  //       counter++;
-  //     }
-  //   }
-  //   return counter;
+  //filling favoriteLocalBox or Firebase
+  void timeCompare() async {
+    DateTime favoriteLocalBoxTime = DateTime.utc(1989, 11, 9);
+    DateTime firebaseDataTime = DateTime.utc(1989, 11, 9);
+    QuerySnapshot snapshot =
+        await FirebaseFirestore.instance.collection('shows').get();
+    List<ShowHive> firestoreData = await getDataFromFirestore();
 
-  // }
+    for (var hiveBoxInfo in favoriteLocalBox.values) {
+      if (hiveBoxInfo.timeNow.isAfter(favoriteLocalBoxTime)) {
+        favoriteLocalBoxTime = hiveBoxInfo.timeNow;
+      }
+    }
 
-  // final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  // //final CollectionReference usersCollection = firestore.collection('shows');
+    //search for the last entry in Firestore
+    firestoreData.sort((a, b) => a.timeNow.compareTo(b.timeNow));
+    Timestamp? timeFireTemp;
+    if (firestoreData.isNotEmpty) {
+      timeFireTemp = firestoreData.last.timeNow;
+      firebaseDataTime = timeFireTemp?.toDate() ?? DateTime.utc(1989, 11, 9);
+    }
 
-  // // void modelFilling() {
-  // //   final CollectionReference usersCollection = firestore.collection('shows');
-  // // }
+    if (firebaseDataTime.isAfter(favoriteLocalBoxTime)) {
+      favoriteLocalBoxClear();
+      favoriteLocalBoxFilling(firestoreData);
+    }
+    if (favoriteLocalBoxTime.isAfter(firebaseDataTime)) {
+      for (var doc in snapshot.docs) {
+        var documentId = doc.id;
+        FirebaseFirestore.instance.collection('shows').doc(documentId).delete();
+      }
 
-  // Future<void> getUsers() async {
-  //   final CollectionReference usersCollection = firestore.collection('shows');
-  //   try {
-  //     final QuerySnapshot querySnapshot = await usersCollection.get();
-
-  //     final List<FavoriteModel> favoriteModel = querySnapshot.docs
-  //         .map((doc) =>
-  //             FavoriteModel.fromMap(doc.data() as Map<String, dynamic>))
-  //         .toList();
-  //     this.favoriteModel = favoriteModel;
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  //   // int? lenght = favoriteModel.length ?? 0;
-  //   for (int index = 0;
-  //       index < 5;
-  //       //favoriteModel!.length;
-  //       index++) {
-  //     final fml = favoriteModel?[index];
-
-  //     print('${fml?.id} + ${fml?.name} + ${fml?.language} + ${fml?.image}');
+      for (var hiveBoxInfo in favoriteLocalBox.values) {
+        FirebaseFirestore.instance.collection('shows').add({
+          'id': hiveBoxInfo.id,
+          'title': hiveBoxInfo.name,
+          'text': hiveBoxInfo.language,
+          'imageURL': hiveBoxInfo.image,
+          'time': hiveBoxInfo.timeNow,
+        });
+      }
+    }
+  }
 }
-//   }
-// }
